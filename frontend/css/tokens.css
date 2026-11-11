@@ -1,0 +1,41 @@
+/* Token desain PERSEGI GO! (docs/DESAIN.md §2–3).
+   Makna tetap: ungu = LUAS, hijau = KELILING. */
+:root {
+  --purple: #6258e8;
+  --purple-dark: #4940c8;
+  --purple-soft: #f0efff;
+  --purple-line: #dcd9ff;
+  --yellow: #ffc85c;
+  --yellow-dark: #f2ae2e;
+  --yellow-ink: #5c3b00;
+  --cream: #fff7e9;
+  --cream-line: #fbe3bb;
+  --green: #17a77b;
+  --green-soft: #e8f8f1;
+  --orange: #c4620f;
+  --orange-soft: #fff1e5;
+  --ink: #252642;
+  --muted: #6e7090;
+  --faint: #9a9bb3;
+  --bg: #f6f7fc;
+  --surface: #ffffff;
+  --line: #ececf5;
+  --known: #fff1b8;
+  --known-line: #f2cf4a;
+  --asked: #d6e8ff;
+  --asked-line: #6aa6f0;
+
+  --font-head: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-sm: 10px;
+  --radius: 16px;
+  --radius-lg: 22px;
+  --shadow: 0 12px 35px rgba(45, 47, 100, 0.07);
+  --shadow-sm: 0 4px 14px rgba(45, 47, 100, 0.06);
+  --focus: 0 0 0 3px rgba(98, 88, 232, 0.35);
+
+  --header-h: 68px;
+  --bottom-nav-h: 64px;
+  --sidebar-w: 230px;
+}

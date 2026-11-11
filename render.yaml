@@ -1,0 +1,25 @@
+# Konfigurasi deploy Render (Blueprint). Nilai rahasia diisi di dashboard Render.
+services:
+  - type: web
+    name: persegi-go
+    runtime: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "backend:create_app()" --workers 2 --timeout 60
+    healthCheckPath: /config.js
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: APP_ENV
+        value: production
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: DATABASE_URL
+        sync: false

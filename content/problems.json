@@ -1,0 +1,154 @@
+{
+  "problems": [
+    {
+      "id": "p-m2-01", "module": "m2", "level": "example", "context": "Persegi",
+      "story": ["Sebuah persegi memiliki ", {"t": "panjang sisi 8 cm", "role": "known", "note": "s = 8 cm"}, ". Berapakah ", {"t": "keliling persegi", "role": "asked", "note": "keliling (K)"}, " tersebut?"],
+      "given": {"s": 8}, "asked": "K", "unit": "cm",
+      "answer": {"value": 32, "unit": "cm"},
+      "guide": "Yang ditanya keliling, yaitu panjang pinggiran.",
+      "prefilled": ["understand", "formula", "substitute", "compute"],
+      "hints": ["Keliling = panjang pinggiran persegi.", "Keliling persegi = 4 × s.", "K = 4 × 8 = …"],
+      "twin": "p-m2-02"
+    },
+    {
+      "id": "p-m2-02", "module": "m2", "level": "complete", "context": "Bingkai foto",
+      "story": [{"t": "Rina", "role": "none"}, " memiliki bingkai foto berbentuk persegi dengan ", {"t": "sisi 12 cm", "role": "known", "note": "s = 12 cm"}, ". Ia ingin menempelkan ", {"t": "pita di sepanjang tepi bingkai", "role": "asked", "note": "panjang pita (keliling)"}, ". Berapa cm pita yang dibutuhkan?"],
+      "given": {"s": 12}, "asked": "K", "unit": "cm",
+      "answer": {"value": 48, "unit": "cm"},
+      "guide": "Pita ditempel di tepi bingkai. Tepi itu pinggiran atau permukaan?",
+      "prefilled": ["understand"],
+      "hints": ["Tepi bingkai = pinggiran, jadi yang dihitung keliling.", "K = 4 × s.", "K = 4 × 12 = …"],
+      "twin": "p-m2-01"
+    },
+    {
+      "id": "p-m3-01", "module": "m3", "level": "example", "context": "Persegi",
+      "story": ["Sebuah persegi memiliki ", {"t": "panjang sisi 7 cm", "role": "known", "note": "s = 7 cm"}, ". Berapakah ", {"t": "luas persegi", "role": "asked", "note": "luas (L)"}, " tersebut?"],
+      "given": {"s": 7}, "asked": "L", "unit": "cm",
+      "answer": {"value": 49, "unit": "cm²"},
+      "guide": "Yang ditanya luas, yaitu banyak kotak yang menutupi persegi.",
+      "prefilled": ["understand", "formula", "substitute", "compute"],
+      "hints": ["Luas = banyak kotak di dalam persegi.", "L = s × s.", "L = 7 × 7 = …"],
+      "twin": "p-m3-02"
+    },
+    {
+      "id": "p-m3-02", "module": "m3", "level": "complete", "context": "Ubin",
+      "story": ["Lantai kelas dipasang ", {"t": "ubin", "role": "none"}, " berbentuk persegi. Setiap ubin memiliki ", {"t": "sisi 20 cm", "role": "known", "note": "s = 20 cm"}, ". Berapakah ", {"t": "luas permukaan satu ubin", "role": "asked", "note": "luas satu ubin (L)"}, "?"],
+      "given": {"s": 20}, "asked": "L", "unit": "cm",
+      "answer": {"value": 400, "unit": "cm²"},
+      "guide": "Yang ditanya permukaan ubin, berarti luas.",
+      "prefilled": ["understand"],
+      "hints": ["Permukaan = luas.", "L = s × s.", "L = 20 × 20 = …"],
+      "twin": "p-m3-01"
+    },
+    {
+      "id": "p-m4-01", "module": "m4", "level": "independent", "context": "Karpet",
+      "story": ["Lantai kamar ", {"t": "Budi", "role": "none"}, " berbentuk persegi dengan ", {"t": "sisi 5 m", "role": "known", "note": "s = 5 m"}, ". Seluruh lantai akan ", {"t": "ditutup karpet", "role": "asked", "note": "luas karpet (L)"}, ". Berapa m² karpet yang dibutuhkan?"],
+      "given": {"s": 5}, "asked": "L", "unit": "m",
+      "answer": {"value": 25, "unit": "m²"},
+      "guide": "Karpet menutupi seluruh lantai. Pinggiran atau permukaan?",
+      "prefilled": [],
+      "hints": ["Karpet menutupi permukaan, jadi yang dihitung luas.", "L = s × s.", "L = 5 × 5 = …"],
+      "twin": "p-m4-02"
+    },
+    {
+      "id": "p-m4-02", "module": "m4", "level": "independent", "context": "Pagar kebun",
+      "story": ["Pak Tani punya ", {"t": "kebun sayur", "role": "none"}, " berbentuk persegi dengan ", {"t": "sisi 9 m", "role": "known", "note": "s = 9 m"}, ". Ia akan memasang ", {"t": "pagar di sekeliling kebun", "role": "asked", "note": "panjang pagar (keliling)"}, ". Berapa meter pagar yang dibutuhkan?"],
+      "given": {"s": 9}, "asked": "K", "unit": "m",
+      "answer": {"value": 36, "unit": "m"},
+      "guide": "Pagar dipasang di sekeliling kebun. Pinggiran atau permukaan?",
+      "prefilled": [],
+      "hints": ["Sekeliling = pinggiran, jadi yang dihitung keliling.", "K = 4 × s.", "K = 4 × 9 = …"],
+      "twin": "p-m4-01"
+    },
+    {
+      "id": "p-m5-01", "module": "m5", "level": "example", "context": "Persegi",
+      "story": ["Sebuah persegi memiliki ", {"t": "keliling 36 cm", "role": "known", "note": "K = 36 cm"}, ". Berapakah ", {"t": "panjang sisinya", "role": "asked", "note": "sisi (s)"}, "?"],
+      "given": {"K": 36}, "asked": "s", "unit": "cm",
+      "answer": {"value": 9, "unit": "cm"},
+      "guide": "Yang diketahui keliling, yang ditanya sisi.",
+      "prefilled": ["understand", "formula", "substitute", "compute"],
+      "hints": ["Keliling = 4 sisi yang sama panjang.", "s = K ÷ 4.", "s = 36 ÷ 4 = …"],
+      "twin": "p-m5-02"
+    },
+    {
+      "id": "p-m5-02", "module": "m5", "level": "complete", "context": "Persegi",
+      "story": ["Sebuah persegi memiliki ", {"t": "luas 81 cm²", "role": "known", "note": "L = 81 cm²"}, ". Berapakah ", {"t": "panjang sisi persegi", "role": "asked", "note": "sisi (s)"}, " tersebut?"],
+      "given": {"L": 81}, "asked": "s", "unit": "cm",
+      "answer": {"value": 9, "unit": "cm"},
+      "guide": "Yang diketahui luas, yang ditanya sisi.",
+      "prefilled": ["understand", "formula"],
+      "hints": ["Cari bilangan yang dikali dirinya sendiri = 81.", "s = √L.", "Berapa × berapa = 81?"],
+      "twin": "p-m5-03"
+    },
+    {
+      "id": "p-m5-03", "module": "m5", "level": "independent", "context": "Persegi",
+      "story": ["Luas sebuah persegi adalah ", {"t": "121 cm²", "role": "known", "note": "L = 121 cm²"}, ". Berapakah ", {"t": "panjang sisi persegi", "role": "asked", "note": "sisi (s)"}, " tersebut?"],
+      "given": {"L": 121}, "asked": "s", "unit": "cm",
+      "answer": {"value": 11, "unit": "cm"},
+      "guide": "Yang diketahui luas, yang ditanya sisi.",
+      "prefilled": [],
+      "hints": ["Cari bilangan yang dikali dirinya sendiri = 121.", "s = √L.", "Coba 10 × 10 = 100. Kurang. Coba bilangan berikutnya."],
+      "twin": "p-m5-02"
+    },
+    {
+      "id": "p-m5-04", "module": "m5", "level": "independent", "context": "Papan catur",
+      "story": ["Sebuah ", {"t": "papan catur", "role": "none"}, " berbentuk persegi memiliki ", {"t": "luas 400 cm²", "role": "known", "note": "L = 400 cm²"}, ". Berapakah ", {"t": "panjang sisi papan", "role": "asked", "note": "sisi (s)"}, "?"],
+      "given": {"L": 400}, "asked": "s", "unit": "cm",
+      "answer": {"value": 20, "unit": "cm"},
+      "guide": "Yang diketahui luas, yang ditanya sisi.",
+      "prefilled": [],
+      "hints": ["Cari bilangan yang dikali dirinya sendiri = 400.", "s = √L.", "Petunjuk: 2 × 2 = 4, jadi coba 20 × 20."],
+      "twin": "p-m5-03"
+    },
+    {
+      "id": "p-m6-01", "module": "m6", "level": "complete", "context": "Taman sekolah",
+      "story": ["Sebuah ", {"t": "taman sekolah", "role": "none"}, " berbentuk persegi memiliki ", {"t": "panjang sisi 15 meter", "role": "known", "note": "s = 15 m"}, ". Pihak sekolah ingin memasang ", {"t": "pagar di sekeliling taman", "role": "asked", "note": "panjang pagar (keliling)"}, ". Berapa meter panjang pagar yang dibutuhkan?"],
+      "given": {"s": 15}, "asked": "K", "unit": "m",
+      "answer": {"value": 60, "unit": "m"},
+      "guide": "Pagar dipasang di sekeliling taman. Pinggiran atau permukaan?",
+      "prefilled": ["understand"],
+      "hints": ["Sekeliling taman = pinggiran, jadi yang dihitung keliling.", "K = 4 × s.", "K = 4 × 15 = …"],
+      "twin": "p-m4-02"
+    },
+    {
+      "id": "p-m6-02", "module": "m6", "level": "complete", "context": "Lis lantai",
+      "story": ["Lantai kamar berbentuk persegi memiliki ", {"t": "luas 16 m²", "role": "known", "note": "L = 16 m²"}, ". ", {"t": "Ayah", "role": "none"}, " akan memasang ", {"t": "lis di sekeliling lantai", "role": "asked", "note": "panjang lis (keliling)"}, ". Berapa meter lis yang dibutuhkan?"],
+      "given": {"L": 16}, "asked": "K", "unit": "m",
+      "answer": {"value": 16, "unit": "m"},
+      "guide": "Lis dipasang di sekeliling lantai. Pinggiran atau permukaan?",
+      "prefilled": ["understand"],
+      "hints": ["Yang diketahui luas, tetapi yang ditanya keliling. Cari sisi dulu.", "s = √L, lalu K = 4 × s.", "s = √16 = 4, lalu K = 4 × 4 = …"],
+      "twin": "p-m6-03"
+    },
+    {
+      "id": "p-m6-03", "module": "m6", "level": "independent", "context": "Kolam ikan",
+      "story": ["Sebuah ", {"t": "kolam ikan", "role": "none"}, " berbentuk persegi memiliki ", {"t": "luas 64 m²", "role": "known", "note": "L = 64 m²"}, ". Berapa meter ", {"t": "tali untuk mengelilingi kolam", "role": "asked", "note": "panjang tali (keliling)"}, "?"],
+      "given": {"L": 64}, "asked": "K", "unit": "m",
+      "answer": {"value": 32, "unit": "m"},
+      "guide": "Tali mengelilingi kolam. Pinggiran atau permukaan?",
+      "prefilled": [],
+      "hints": ["Cari sisi dulu dari luas, lalu hitung keliling.", "s = √L, lalu K = 4 × s.", "s = √64 = 8, lalu K = 4 × 8 = …"],
+      "twin": "p-m6-02"
+    },
+    {
+      "id": "p-m6-04", "module": "m6", "level": "independent", "context": "Kebun",
+      "story": ["Sebuah ", {"t": "kebun", "role": "none"}, " berbentuk persegi dikelilingi ", {"t": "pagar sepanjang 48 m", "role": "known", "note": "K = 48 m"}, ". Berapakah ", {"t": "luas kebun", "role": "asked", "note": "luas (L)"}, " tersebut?"],
+      "given": {"K": 48}, "asked": "L", "unit": "m",
+      "answer": {"value": 144, "unit": "m²"},
+      "guide": "Yang ditanya luas kebun, yaitu permukaannya.",
+      "prefilled": [],
+      "hints": ["Panjang pagar = keliling. Cari sisi dulu.", "s = K ÷ 4, lalu L = s × s.", "s = 48 ÷ 4 = 12, lalu L = 12 × 12 = …"],
+      "twin": "p-m6-05"
+    },
+    {
+      "id": "p-m6-05", "module": "m6", "level": "independent", "context": "Saputangan",
+      "story": [{"t": "Ibu", "role": "none"}, " menjahit saputangan berbentuk persegi dengan ", {"t": "luas 625 cm²", "role": "known", "note": "L = 625 cm²"}, ". Ibu ingin memasang ", {"t": "renda di sepanjang tepinya", "role": "asked", "note": "panjang renda (keliling)"}, ". Berapa cm renda yang dibutuhkan?"],
+      "given": {"L": 625}, "asked": "K", "unit": "cm",
+      "answer": {"value": 100, "unit": "cm"},
+      "guide": "Renda dipasang di tepi saputangan. Pinggiran atau permukaan?",
+      "prefilled": [],
+      "hints": ["Cari sisi dulu dari luas, lalu hitung keliling.", "s = √L, lalu K = 4 × s.", "25 × 25 = 625, jadi s = 25. Lalu K = 4 × 25 = …"],
+      "twin": "p-m6-03"
+    }
+  ]
+}

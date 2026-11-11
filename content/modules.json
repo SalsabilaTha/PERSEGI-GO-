@@ -1,0 +1,244 @@
+{
+  "modules": [
+    {
+      "id": "m1",
+      "number": "01",
+      "eyebrow": "KONSEP DASAR",
+      "title": "Berkenalan dengan persegi",
+      "short": "Mengenal Persegi",
+      "subtitle": "Yuk, pahami bentuk, bagian, dan sifat-sifat persegi.",
+      "steps": [
+        {
+          "title": "Ini persegi",
+          "text": ["Perhatikan keempat sisinya.", "Coba ukur dengan matamu: apakah panjangnya sama?"],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "side", "labels": "letter" }
+        },
+        {
+          "title": "Apa itu persegi?",
+          "text": ["Persegi adalah bangun datar segi empat.", "Keempat sisinya sama panjang dan keempat sudutnya siku-siku (90°)."],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "angle", "labels": "letter" }
+        },
+        {
+          "title": "Sisi berhadapan sejajar",
+          "text": ["Sisi atas sejajar dengan sisi bawah.", "Sisi kiri sejajar dengan sisi kanan."],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "parallel", "labels": "letter" }
+        },
+        {
+          "title": "Diagonal sama panjang",
+          "text": ["Garis dari sudut ke sudut disebut diagonal.", "Kedua diagonal persegi sama panjang dan berpotongan tepat di tengah."],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "diagonal", "labels": "letter" }
+        },
+        {
+          "title": "Mana yang persegi?",
+          "text": ["Ketuk bangun yang merupakan persegi."],
+          "visual": { "type": "pick" }
+        }
+      ],
+      "properties": [
+        { "title": "4 sisi sama panjang", "desc": "Semua sisinya memiliki ukuran yang sama." },
+        { "title": "4 sudut siku-siku", "desc": "Setiap sudut besarnya 90°." },
+        { "title": "Sisi berhadapan sejajar", "desc": "Dua pasang sisi yang berhadapan sejajar." },
+        { "title": "Diagonal sama panjang", "desc": "Kedua diagonal berpotongan di tengah." }
+      ],
+      "formulas": ["L", "K"],
+      "example": "Sebuah persegi memiliki sisi 5 cm. Luasnya adalah 5 × 5 = 25 cm², sedangkan kelilingnya 4 × 5 = 20 cm.",
+      "remember": ["Persegi punya empat sisi sama panjang.", "Semua sudutnya 90°.", "Luas memakai satuan persegi (cm²), keliling memakai satuan panjang (cm)."],
+      "tip": "Amati ubin lantai atau papan catur. Keduanya memiliki bentuk persegi!"
+    },
+    {
+      "id": "m2",
+      "number": "02",
+      "eyebrow": "RUMUS",
+      "title": "Keliling persegi",
+      "short": "Keliling",
+      "subtitle": "Keliling adalah panjang pinggiran persegi.",
+      "steps": [
+        {
+          "title": "Keliling = pinggiran",
+          "text": ["Keliling adalah panjang seluruh pinggiran persegi.", "Perhatikan garis yang ditelusuri."],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "perimeter", "labels": "value", "animate": "trace" }
+        },
+        {
+          "title": "Semut berjalan",
+          "text": ["Seekor semut berjalan mengelilingi persegi bersisi 5 cm.", "Jaraknya: 5 + 5 + 5 + 5 = 20 cm."],
+          "visual": { "type": "square", "side": 5, "unit": "cm", "highlight": "perimeter", "labels": "value", "animate": "trace", "caption": "5 + 5 + 5 + 5 = 20 cm" }
+        },
+        {
+          "title": "Rumus keliling",
+          "text": ["Keempat sisinya sama panjang.", "Jadi cukup kalikan 4 dengan panjang sisinya."],
+          "visual": { "type": "formula", "which": "K", "line": "K = 4 × 5 = 20 cm" }
+        },
+        {
+          "title": "Satuan keliling",
+          "text": ["Keliling adalah panjang, jadi satuannya sama dengan sisi.", "Sisi dalam cm → keliling dalam cm. Sisi dalam m → keliling dalam m."],
+          "visual": { "type": "square", "side": 3, "unit": "m", "highlight": "perimeter", "labels": "value", "caption": "K = 4 × 3 = 12 m" }
+        }
+      ],
+      "formulas": ["K"],
+      "example": "Bingkai foto persegi bersisi 10 cm. Panjang pita di tepinya = 4 × 10 = 40 cm.",
+      "remember": ["Keliling = panjang pinggiran.", "K = 4 × s.", "Satuan keliling: cm atau m (tanpa pangkat)."],
+      "tip": "Bayangkan memasang pita di tepi bingkai foto. Panjang pita itulah kelilingnya."
+    },
+    {
+      "id": "m3",
+      "number": "03",
+      "eyebrow": "RUMUS",
+      "title": "Luas persegi",
+      "short": "Luas",
+      "subtitle": "Luas adalah banyak kotak satuan yang menutupi persegi.",
+      "warmup": [
+        { "q": "6 × 6 = ?", "a": 36 },
+        { "q": "9 × 9 = ?", "a": 81 },
+        { "q": "12 × 12 = ?", "a": 144 }
+      ],
+      "steps": [
+        {
+          "title": "Luas = banyak kotak",
+          "text": ["Luas adalah banyak kotak satuan yang menutupi persegi.", "Perhatikan kotak-kotak yang terisi."],
+          "visual": { "type": "grid", "side": 3, "unit": "cm", "animate": "fill" }
+        },
+        {
+          "title": "Hitung per baris",
+          "text": ["Persegi bersisi 3 cm punya 3 baris.", "Setiap baris berisi 3 kotak."],
+          "visual": { "type": "grid", "side": 3, "unit": "cm", "animate": "fill", "caption": "3 baris × 3 kotak = 9 kotak" }
+        },
+        {
+          "title": "Rumus luas",
+          "text": ["Banyak kotak = sisi × sisi.", "Ditulis juga s² (dibaca: s kuadrat)."],
+          "visual": { "type": "formula", "which": "L", "line": "L = 3 × 3 = 9 cm²" }
+        },
+        {
+          "title": "Satuan luas",
+          "text": ["Satu kotak berukuran 1 cm × 1 cm = 1 cm².", "Satuan luas selalu berpangkat dua: cm² atau m²."],
+          "visual": { "type": "grid", "side": 4, "unit": "cm", "caption": "L = 4 × 4 = 16 cm²" }
+        }
+      ],
+      "formulas": ["L"],
+      "example": "Ubin persegi bersisi 20 cm. Luasnya = 20 × 20 = 400 cm².",
+      "remember": ["Luas = banyak kotak di dalam persegi.", "L = s × s = s².", "Satuan luas berpangkat dua: cm², m²."],
+      "tip": "Hitung ubin di lantai kelasmu. Banyak ubin itulah luas lantai (dalam satuan ubin)."
+    },
+    {
+      "id": "m4",
+      "number": "04",
+      "eyebrow": "MEMILIH RUMUS",
+      "title": "Luas atau keliling?",
+      "short": "Luas atau Keliling?",
+      "subtitle": "Kenali dari cerita: pinggiran atau permukaan?",
+      "steps": [
+        {
+          "title": "Pinggiran → keliling",
+          "text": ["Pagar, bingkai, lis, pita, dan renda dipasang di pinggiran.", "Pinggiran dihitung dengan keliling."],
+          "visual": { "type": "square", "side": 4, "unit": "m", "highlight": "perimeter", "labels": "value", "caption": "Pagar → K = 4 × s" }
+        },
+        {
+          "title": "Permukaan → luas",
+          "text": ["Karpet, keramik, rumput, dan cat menutupi permukaan.", "Permukaan dihitung dengan luas."],
+          "visual": { "type": "square", "side": 4, "unit": "m", "highlight": "area", "labels": "value", "caption": "Karpet → L = s × s" }
+        },
+        {
+          "title": "Ayo memilah",
+          "text": ["Pilih: benda ini menghitung pinggiran atau permukaan?"],
+          "visual": {
+            "type": "sort",
+            "items": [
+              { "t": "Pagar kebun", "k": "K" },
+              { "t": "Karpet lantai", "k": "L" },
+              { "t": "Bingkai foto", "k": "K" },
+              { "t": "Rumput lapangan", "k": "L" },
+              { "t": "Renda saputangan", "k": "K" },
+              { "t": "Cat dinding", "k": "L" }
+            ]
+          }
+        }
+      ],
+      "formulas": ["L", "K"],
+      "example": "Kebun persegi bersisi 9 m. Pagar → keliling = 4 × 9 = 36 m. Rumput → luas = 9 × 9 = 81 m².",
+      "remember": ["Pinggiran (pagar, bingkai) → keliling.", "Permukaan (karpet, keramik) → luas.", "Cek satuan: keliling m, luas m²."],
+      "tip": "Tanyakan pada dirimu: benda ini mengelilingi atau menutupi?"
+    },
+    {
+      "id": "m5",
+      "number": "05",
+      "eyebrow": "KEBALIKAN RUMUS",
+      "title": "Mencari panjang sisi",
+      "short": "Mencari Sisi",
+      "subtitle": "Jika luas atau keliling diketahui, berapa sisinya?",
+      "warmup": [
+        { "q": "28 ÷ 4 = ?", "a": 7 },
+        { "q": "Bilangan berapa dikali dirinya sendiri = 25?", "a": 5 },
+        { "q": "Bilangan berapa dikali dirinya sendiri = 64?", "a": 8 }
+      ],
+      "steps": [
+        {
+          "title": "Dari keliling",
+          "text": ["Keliling adalah 4 sisi yang sama panjang.", "Jika K = 36 cm, satu sisi = 36 ÷ 4 = 9 cm."],
+          "visual": { "type": "formula", "which": "sK", "line": "s = 36 ÷ 4 = 9 cm" }
+        },
+        {
+          "title": "Dari luas: berapa kotak per baris?",
+          "text": ["Luas persegi 49 kotak.", "Kita cari: berapa kotak dalam satu baris?"],
+          "visual": { "type": "grid", "side": 6, "target": 49, "unit": "cm", "caption": "Coba sisi 6 → 6 × 6 = 36 (kurang 13)" }
+        },
+        {
+          "title": "Coba sisi 7",
+          "text": ["7 × 7 = 49. Pas!", "Jadi sisinya 7 cm."],
+          "visual": { "type": "grid", "side": 7, "target": 49, "unit": "cm", "caption": "7 × 7 = 49 ✓" }
+        },
+        {
+          "title": "Akar kuadrat",
+          "text": ["Mencari bilangan yang dikali dirinya sendiri disebut akar kuadrat.", "√49 = 7, karena 7 × 7 = 49."],
+          "visual": { "type": "formula", "which": "sL", "line": "s = √49 = 7 cm" }
+        },
+        {
+          "title": "Cek jawabanmu",
+          "text": ["Kalikan sisi dengan dirinya sendiri, hasilnya harus sama dengan luas.", "Satuan sisi adalah cm, bukan cm²."],
+          "visual": { "type": "square", "side": 7, "unit": "cm", "highlight": "area", "labels": "value", "caption": "Cek: 7 × 7 = 49 cm² ✓" }
+        }
+      ],
+      "formulas": ["sK", "sL"],
+      "example": "Luas persegi 121 cm². Bilangan apa dikali dirinya = 121? 11 × 11 = 121, jadi sisinya 11 cm.",
+      "remember": ["Dari keliling → bagi 4.", "Dari luas → akar kuadrat (s × s = L).", "Satuan sisi: cm atau m, bukan cm²."],
+      "tip": "Hafalkan kuadrat 1 sampai 20 (1, 4, 9, 16, …, 400). Mencari akar jadi lebih cepat!"
+    },
+    {
+      "id": "m6",
+      "number": "06",
+      "eyebrow": "LITERASI",
+      "title": "Menyelesaikan soal cerita",
+      "short": "Soal Cerita",
+      "subtitle": "Lima tahap yang selalu sama untuk setiap soal cerita.",
+      "steps": [
+        {
+          "title": "1. Pahami",
+          "text": ["Tandai yang diketahui dan yang ditanya.", "Abaikan kata yang tidak penting."],
+          "visual": { "type": "stages", "active": 0 }
+        },
+        {
+          "title": "2. Pilih rumus",
+          "text": ["Tanyakan: pinggiran atau permukaan? Yang diketahui sisi, luas, atau keliling?"],
+          "visual": { "type": "stages", "active": 1 }
+        },
+        {
+          "title": "3–4. Masukkan dan hitung",
+          "text": ["Masukkan angka ke rumus, lalu hitung.", "Jangan lupa tulis satuannya."],
+          "visual": { "type": "stages", "active": 3 }
+        },
+        {
+          "title": "5. Periksa",
+          "text": ["Apakah jawabanmu masuk akal?", "Bayangkan bentuk perseginya, lalu cek dengan rumus kebalikan."],
+          "visual": { "type": "stages", "active": 4 }
+        },
+        {
+          "title": "Soal dua langkah",
+          "text": ["Luas lantai 16 m². Berapa panjang lis di sekelilingnya?", "Langkah 1: s = √16 = 4 m. Langkah 2: K = 4 × 4 = 16 m."],
+          "visual": { "type": "square", "side": 4, "unit": "m", "highlight": "perimeter", "labels": "value", "caption": "s = 4 m → K = 16 m" }
+        }
+      ],
+      "formulas": ["L", "K", "sK", "sL"],
+      "example": "Taman persegi bersisi 15 m akan dipagari. Pagar ada di pinggiran → K = 4 × 15 = 60 m.",
+      "remember": ["Pahami → Rumus → Masukkan → Hitung → Periksa.", "Soal bisa butuh dua langkah (cari sisi dulu).", "Selalu cek satuan dan kewajaran."],
+      "tip": "Garis bawahi angka dan kata kunci saat membaca soal cerita."
+    }
+  ]
+}

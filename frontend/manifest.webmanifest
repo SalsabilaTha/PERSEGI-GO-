@@ -1,0 +1,19 @@
+{
+  "name": "PERSEGI GO! - Petualangan Matematika",
+  "short_name": "PERSEGI GO!",
+  "description": "Belajar bangun datar persegi untuk SMP kelas VII.",
+  "id": "/",
+  "start_url": "/#/beranda",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f7fc",
+  "theme_color": "#6258e8",
+  "lang": "id",
+  "categories": ["education"],
+  "icons": [
+    { "src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

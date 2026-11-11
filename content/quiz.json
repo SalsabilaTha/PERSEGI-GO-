@@ -1,0 +1,41 @@
+{
+  "id": "kuis-dasar",
+  "title": "Uji pengetahuanmu!",
+  "questions": [
+    {
+      "icon": "🧠",
+      "q": "Bangun datar persegi memiliki berapa sisi yang sama panjang?",
+      "options": ["Dua sisi", "Tiga sisi", "Empat sisi", "Lima sisi"],
+      "answer": 2,
+      "explain": "Persegi punya 4 sisi dan semuanya sama panjang."
+    },
+    {
+      "icon": "📐",
+      "q": "Besar setiap sudut pada persegi adalah …",
+      "options": ["45°", "60°", "90°", "180°"],
+      "answer": 2,
+      "explain": "Keempat sudut persegi siku-siku, yaitu 90°."
+    },
+    {
+      "icon": "🟪",
+      "q": "Sebuah persegi bersisi 6 cm. Luasnya adalah …",
+      "options": ["24 cm", "24 cm²", "36 cm", "36 cm²"],
+      "answer": 3,
+      "explain": "L = 6 × 6 = 36 cm². Luas memakai satuan cm²."
+    },
+    {
+      "icon": "📏",
+      "q": "Sebuah persegi bersisi 9 cm. Kelilingnya adalah …",
+      "options": ["36 cm", "81 cm", "18 cm", "36 cm²"],
+      "answer": 0,
+      "explain": "K = 4 × 9 = 36 cm. Keliling memakai satuan cm."
+    },
+    {
+      "icon": "√",
+      "q": "Luas sebuah persegi 64 cm². Panjang sisinya adalah …",
+      "options": ["16 cm", "8 cm", "32 cm", "4 cm"],
+      "answer": 1,
+      "explain": "Cari bilangan yang dikali dirinya sendiri = 64: 8 × 8 = 64, jadi sisinya 8 cm."
+    }
+  ]
+}

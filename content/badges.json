@@ -1,0 +1,12 @@
+{
+  "badges": [
+    { "id": "pembaca_tekun", "icon": "📖", "name": "Pembaca tekun", "desc": "Selesaikan 1 materi" },
+    { "id": "berani_mencoba", "icon": "🎯", "name": "Berani mencoba", "desc": "Selesaikan kuis" },
+    { "id": "bintang_baru", "icon": "⭐", "name": "Bintang baru", "desc": "Raih skor minimal 80%" },
+    { "id": "pembelajar_aktif", "icon": "🚀", "name": "Pembelajar aktif", "desc": "Kumpulkan 50 XP" },
+    { "id": "penakluk_akar", "icon": "√", "name": "Penakluk akar", "desc": "Benar 3 soal sisi dari luas" },
+    { "id": "teliti_satuan", "icon": "📏", "name": "Teliti satuan", "desc": "5 latihan benar tanpa salah satuan" },
+    { "id": "penjelajah_cerita", "icon": "🗺️", "name": "Penjelajah cerita", "desc": "Selesaikan semua soal cerita M6" },
+    { "id": "ahli_persegi", "icon": "🏆", "name": "Ahli persegi", "desc": "Selesaikan semua materi" }
+  ]
+}
