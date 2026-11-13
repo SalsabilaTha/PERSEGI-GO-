@@ -127,8 +127,6 @@ service worker supaya tetap tampil offline.
 │   Petualangan Matematika     │
 │      [ilustrasi kotak 4]     │
 ├──────────────────────────────┤
-│ [ G  Masuk dengan Google ]   │  tombol putih bergaris
-│ ──────── atau ────────       │
 │ Email      [              ]  │
 │ Kata sandi [              ]  │
 │ [        Masuk        ]      │  tombol kuning

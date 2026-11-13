@@ -1,4 +1,4 @@
-# SETUP AKUN — Supabase, Google Login, GitHub, dan Render
+# SETUP AKUN — Supabase, GitHub, dan Render
 
 Panduan ini dikerjakan **sendiri oleh Salsabila** (butuh login ke akun pribadi). Semua layanan
 gratis. Catat nilai-nilai yang ditandai 📋 karena akan diisi ke file `.env`.
@@ -36,25 +36,10 @@ gratis. Catat nilai-nilai yang ditandai 📋 karena akan diisi ke file `.env`.
 4. Catatan: email bawaan Supabase dibatasi beberapa email per jam. Untuk uji coba kelas
    besar, atur SMTP sendiri (misal Gmail App Password atau Brevo) di **Project Settings → Auth → SMTP**.
 
-## 3. Google Login
+## 3. Supabase: Hanya Login Email
 
-### 3a. Google Cloud Console
-1. Buka https://console.cloud.google.com → buat proyek `persegi-go`.
-2. **APIs & Services → OAuth consent screen**
-   - User type: **External**
-   - App name: `PERSEGI GO!`, email dukungan: email Anda
-   - Scopes: `email`, `profile`, `openid` (bawaan)
-   - Setelah selesai, **Publish app** agar semua akun Google bisa login (bukan hanya *test users*).
-3. **Credentials → Create credentials → OAuth client ID**
-   - Application type: **Web application**
-   - Authorized JavaScript origins: `http://localhost:5000`, `https://<nama-app>.onrender.com`
-   - Authorized redirect URIs: `https://<project-ref>.supabase.co/auth/v1/callback`
-     (salin persis dari halaman provider Google di Supabase)
-4. Catat **Client ID** dan **Client secret** 📋.
-
-### 3b. Hubungkan ke Supabase
-1. **Authentication → Sign In / Providers → Google** → aktifkan.
-2. Tempel Client ID dan Client secret → **Save**.
+Aplikasi hanya memakai login **email + kata sandi**. Di **Authentication → Sign In / Providers**,
+biarkan Google dan provider lain **tidak aktif**, supaya tidak ada jalur login lain selain email.
 
 ## 4. Supabase: URL Aplikasi
 
@@ -95,7 +80,8 @@ Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + log
 3. **Environment** → tambahkan semua variabel dari `.env` (kecuali yang khusus lokal), serta
    `PYTHON_VERSION=3.12.7`.
 4. **Deploy**. Setelah selesai, Anda mendapat URL `https://<nama-app>.onrender.com`.
-5. Kembali ke **Supabase §4** dan **Google §3a**, lalu pastikan URL ini sudah terdaftar.
+5. Kembali ke **Supabase §4**, lalu pastikan URL ini sudah terdaftar (tautan verifikasi dan
+   atur ulang kata sandi di email akan mengarah ke sini).
 
 Catatan: layanan gratis Render **tertidur setelah 15 menit** tanpa pengunjung, sehingga akses
 pertama setelahnya lambat (±30–60 detik). Aplikasi tetap tampil dari cache; data dikirim saat server bangun.

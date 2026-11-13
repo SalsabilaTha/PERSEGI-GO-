@@ -134,7 +134,7 @@ export function render(root) {
     h('section', { class: 'card' },
       h('h2', {}, 'Akun'),
       h('p', {}, h('b', {}, u.name || 'Penjelajah'), h('br'),
-        h('span', { class: 'muted' }, `${u.email} · masuk dengan ${u.provider === 'google' ? 'Google' : u.provider === 'dev' ? 'mode uji' : 'email'}`)),
+        h('span', { class: 'muted' }, `${u.email} · masuk dengan ${u.provider === 'dev' ? 'mode uji' : 'email'}`)),
       h('div', { class: 'btn-row' },
         exportBtn,
         isStandalone() ? null : h('button', { class: 'btn btn-soft', type: 'button', onclick: promptInstall }, '＋ Pasang aplikasi'),

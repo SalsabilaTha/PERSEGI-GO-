@@ -4,7 +4,7 @@ Aplikasi web (PWA) untuk belajar **bangun datar persegi** (SMP kelas VII), diran
 wawancara siswa dan prinsip **Cognitive Load Theory** untuk meningkatkan literasi matematika.
 
 - **Backend:** Python (Flask) · **Frontend:** JavaScript (tanpa framework)
-- **Login:** Supabase (Google atau email, termasuk iCloud) · **Database:** Supabase PostgreSQL
+- **Login:** Supabase (email + kata sandi, termasuk Gmail/iCloud) · **Database:** Supabase PostgreSQL
 - **Bisa dipasang di HP** tanpa Play Store / App Store (PWA)
 
 Penyusun: Salsabila Thahira (2225250214), Pendidikan Matematika, kelas 3B.
@@ -30,7 +30,7 @@ python app.py                     # buka http://localhost:5000
 ```
 
 Tanpa file `.env`, aplikasi berjalan dalam **mode uji lokal**: login cukup dengan nama dan email
-bebas, dan data disimpan di `instance/persegi.db` (SQLite). Untuk login Google/email sungguhan,
+bebas, dan data disimpan di `instance/persegi.db` (SQLite). Untuk login email sungguhan,
 ikuti [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md), lalu isi `.env` (contoh: `.env.example`).
 
 ## Tes

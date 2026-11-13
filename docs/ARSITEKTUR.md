@@ -8,8 +8,8 @@
 │ frontend (JS)      │◄──────────────►│ Flask (Python)   │◄────────►│ PostgreSQL     │
 │ - service worker   │   /api + JWT   │ - static files   │          │ (RLS aktif)    │
 │ - outbox offline   │                │ - REST API       │          ├────────────────┤
-│ - supabase-js ─────┼──── login ────────────────────────────────►│ Auth (Google,  │
-└────────────────────┘                │ - verifikasi JWT │◄─ JWKS ──│ Email)         │
+│ - supabase-js ─────┼──── login ────────────────────────────────►│ Auth (email +  │
+└────────────────────┘                │ - verifikasi JWT │◄─ JWKS ──│ kata sandi)    │
                                       └──────────────────┘          └────────────────┘
 ```
 
@@ -24,7 +24,7 @@
 |---|---|
 | Backend | Python 3.11+, **Flask 3**, **SQLAlchemy 2 (Core)**, **psycopg 3** (driver Postgres), **PyJWT[crypto]**, python-dotenv, gunicorn |
 | Database | Supabase PostgreSQL (koneksi *Session pooler*, port 5432) |
-| Auth | Supabase Auth: Google OAuth + Email/Password, konfirmasi email aktif |
+| Auth | Supabase Auth: Email/Password saja, konfirmasi email aktif |
 | Frontend | HTML, CSS, JS ES Modules; `supabase-js` v2 (UMD, versi dikunci, dari jsDelivr) |
 | PWA | manifest + service worker + ikon PNG |
 | Tes | pytest (SQLite in-memory + JWT uji) |
@@ -70,7 +70,7 @@ supaya semua wheel tersedia.
 │   │   ├── main.js           # inisialisasi: cek sesi → login atau aplikasi
 │   │   ├── router.js         # hash router (#/beranda, #/materi/m1, …)
 │   │   ├── supabaseClient.js # createClient dari window.APP_CONFIG
-│   │   ├── auth.js           # loginGoogle, loginEmail, signUp, resetPassword, logout, getToken
+│   │   ├── auth.js           # loginEmail, signUp, resetPassword, logout, getToken
 │   │   ├── api.js            # fetch ke /api dengan token; tangani 401
 │   │   ├── outbox.js         # antrean aktivitas offline + sinkron
 │   │   ├── install.js        # beforeinstallprompt + petunjuk iOS
@@ -95,7 +95,7 @@ supaya semua wheel tersedia.
 Siswa           Browser (auth.js)            Supabase Auth          Flask
   │ buka app ──►│ getSession()                     │                   │
   │             │── tidak ada sesi ─► tampil Login │                   │
-  │ klik Google►│ signInWithOAuth(redirectTo=app) ►│ ─► Google ─► kembali│
+  │ isi email ─►│ signInWithPassword(email, pw) ──►│                   │
   │             │◄── sesi (access_token, refresh) ─│                   │
   │             │ GET /api/me  Authorization: Bearer <JWT> ───────────►│ verifikasi JWT
   │             │                                                      │ upsert users
@@ -104,7 +104,6 @@ Siswa           Browser (auth.js)            Supabase Auth          Flask
 ```
 - Email: `signUp({email, password, options:{data:{name}}})` → email konfirmasi →
   `signInWithPassword`. Lupa: `resetPasswordForEmail` → halaman `#/reset` untuk kata sandi baru.
-- Google memakai **redirect** (bukan popup) agar berjalan di PWA standalone dan iPhone.
 - supabase-js menyimpan dan me-refresh sesi otomatis, sehingga siswa tidak perlu login ulang.
 - Jika API mengembalikan 401, `api.js` mencoba refresh sesi sekali; jika gagal, kembali ke Login.
 
@@ -133,7 +132,7 @@ create table users (
   supabase_uid  uuid unique not null,
   email         text not null,
   name          text,
-  provider      text,                         -- 'google' | 'email'
+  provider      text,                         -- 'email' (atau 'dev' di mode uji)
   created_at    timestamptz default now(),
   last_login    timestamptz default now()
 );

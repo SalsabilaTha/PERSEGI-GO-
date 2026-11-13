@@ -11,7 +11,7 @@ yang **wajib** diikuti saat menulis kode untuk proyek ini.
 
 Aplikasi web pembelajaran **Bangun Datar Persegi** (SMP kelas 7, juga untuk remedial kelas 8).
 Ciri utama:
-- **Wajib login** (Google atau email/kata sandi, termasuk email iCloud) memakai **Supabase Auth**.
+- **Wajib login** (email + kata sandi; email apa pun, termasuk Gmail & iCloud) memakai **Supabase Auth**.
   Semua aktivitas dan riwayat tersimpan di database dan terhubung ke akun.
 - **Bisa dipasang di HP tanpa Play Store/App Store** sebagai **PWA**.
 - Dibangun dengan **Python (backend Flask)** dan **JavaScript (frontend)**.
@@ -26,7 +26,7 @@ Ciri utama:
 | [docs/DESAIN.md](docs/DESAIN.md) | Design system PERSEGI GO!, layout, wireframe tiap layar, aturan CLT |
 | [docs/ARSITEKTUR.md](docs/ARSITEKTUR.md) | Stack, struktur folder, API, database, auth, PWA, offline |
 | [docs/KONTEN_MATERI.md](docs/KONTEN_MATERI.md) | Materi, kuis, bank soal, miskonsepsi, XP & lencana |
-| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, Google OAuth, Render |
+| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, GitHub, Render |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Tahapan pengerjaan dan checklist |
 
 Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila ragu.
@@ -37,7 +37,7 @@ Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila
 |---|---|
 | Backend | **Python 3.11+ + Flask**, SQLAlchemy (Core), PyJWT, gunicorn (produksi) |
 | Database | **Supabase PostgreSQL** (produksi & pengembangan); **SQLite in-memory** untuk tes |
-| Auth | **Supabase Auth** (Google OAuth + Email/Password) via `supabase-js` v2 |
+| Auth | **Supabase Auth** (Email/Password saja) via `supabase-js` v2 |
 | Frontend | **HTML + CSS + JavaScript ES Modules**, tanpa framework, tanpa npm, tanpa build tool |
 | PWA | `manifest.webmanifest` + `sw.js` + ikon PNG |
 | Hosting | **Render** (Web Service gratis) |
@@ -49,7 +49,8 @@ Aturan:
 - CDN yang diizinkan **hanya**: `supabase-js` (versi dikunci, dari `cdn.jsdelivr.net`) dan
   Google Fonts (Nunito, DM Sans) dengan fallback font sistem. Keduanya ikut di-cache service worker.
 - Tidak ada Tutor AI / chatbot / API LLM (sudah diputuskan untuk dihapus).
-- Tidak ada Sign in with Apple (berbayar). Pengguna iPhone memakai Google atau email.
+- Login **hanya email + kata sandi**. Tidak ada login Google (dihapus atas permintaan pemilik)
+  maupun Sign in with Apple (berbayar).
 
 ## 4. Rahasia dan Keamanan
 

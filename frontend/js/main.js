@@ -91,11 +91,12 @@ async function boot() {
 
   const params = new URLSearchParams(location.search);
   const resetMode = params.has('reset');
-  const oauthError = params.get('error_description');
+  // Supabase menambahkan ?error_description= bila tautan email (verifikasi/atur ulang) kedaluwarsa
+  const linkError = params.get('error_description');
 
   let user = null;
   try {
-    user = await auth.currentUser();   // juga menukar ?code= dari Google/email menjadi sesi
+    user = await auth.currentUser();   // juga menukar ?code= dari tautan email menjadi sesi
   } catch (e) {
     showLogin({ message: auth.friendlyError(e) });
     return;
@@ -109,7 +110,7 @@ async function boot() {
     return;
   }
   if (!user) {
-    showLogin({ message: oauthError ? auth.friendlyError(oauthError) : undefined });
+    showLogin({ message: linkError ? auth.friendlyError(linkError) : undefined });
     return;
   }
   await enterApp(user);

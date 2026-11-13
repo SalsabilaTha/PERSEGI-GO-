@@ -90,7 +90,8 @@ Prioritas: **P0** = wajib (MVP), **P1** = penting, **P2** = jika sempat.
 ### F11. Login dan Sinkronisasi Akun (P0) — *baru*
 - Saat aplikasi dibuka tanpa sesi, layar **Login** tampil terlebih dahulu. Halaman lain tidak
   bisa diakses sebelum login.
-- Metode: **"Masuk dengan Google"** dan **Email + kata sandi** (Daftar, Masuk, Lupa kata sandi).
+- Metode: **Email + kata sandi** saja (Daftar, Masuk, Lupa kata sandi). Login Google dihapus
+  atas keputusan pemilik (13/11/2026).
   Email apa pun bisa dipakai, termasuk `@icloud.com`.
 - Pendaftaran email memerlukan **verifikasi email** (tautan dari Supabase).
 - Sesi diingat (tidak perlu login setiap membuka aplikasi); tombol **Keluar** ada di halaman Progres.
@@ -247,7 +248,5 @@ pada posttest, dengan satuan benar.
 | Data baru dari 1 siswa | Uji dengan siswa lain sebelum finalisasi |
 | Render gratis tertidur → request pertama ±30–60 detik | Tampilan dari cache PWA; aktivitas lewat outbox, tidak menunggu server |
 | Proyek Supabase gratis dijeda setelah ±7 hari tanpa aktivitas | Data tetap aman; aktifkan lagi dari dashboard; jadwalkan uji coba berdekatan |
-| Siswa tidak punya akun Google | Daftar dengan email apa pun |
 | Siswa lupa kata sandi | Fitur reset kata sandi lewat email |
-| Login Google di PWA iPhone | Memakai alur redirect (bukan popup) |
 | Siswa di bawah umur | Data minimal, tanpa nama asli wajib, ada ekspor & hapus akun, izin dari guru/orang tua untuk uji coba |

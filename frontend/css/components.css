@@ -354,10 +354,6 @@ details summary { cursor: pointer; font-weight: 700; color: var(--purple); min-h
 .login-hero .mini-square { width: 74px; height: 74px; margin: 16px auto 8px; border-radius: 18px; background: linear-gradient(145deg, #ffe39e, var(--yellow)); box-shadow: 8px 8px 0 var(--purple); display: grid; place-items: center; font: 900 32px var(--font-head); color: var(--yellow-ink); transform: rotate(-8deg); }
 .form-field { display: grid; gap: 6px; margin-bottom: 12px; }
 .form-field label { font-weight: 700; font-size: 14px; }
-.divider { display: flex; align-items: center; gap: 10px; color: var(--faint); font-size: 13px; margin: 16px 0; }
-.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
-.google-btn { background: #fff; border: 1.5px solid var(--line); color: var(--ink); width: 100%; }
-.google-btn svg { width: 20px; height: 20px; }
 .form-msg { border-radius: 12px; padding: 10px 12px; font-size: 14px; margin-bottom: 12px; }
 .form-msg.error { background: var(--orange-soft); color: #8a430a; }
 .form-msg.ok { background: var(--green-soft); color: #0f6b4f; }

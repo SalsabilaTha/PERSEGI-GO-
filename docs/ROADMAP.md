@@ -6,7 +6,7 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - [x] Wawancara siswa S01 dan matriks analisis
 - [x] Dokumen perencanaan v0.2 (CLAUDE.md, PRD, DESAIN, ARSITEKTUR, KONTEN_MATERI, SETUP_AKUN, ROADMAP)
 - [ ] Review dokumen bersama dosen pembimbing
-- [ ] Buat proyek Supabase, aktifkan Email & Google (SETUP_AKUN §1–4)
+- [ ] Buat proyek Supabase, aktifkan login Email (SETUP_AKUN §1–4)
 - [ ] Buat akun GitHub & Render (SETUP_AKUN §6–7)
 - [ ] Instal Python 3.12 (disarankan untuk kecocokan library)
 - **Selesai jika:** semua nilai 📋 sudah tercatat
@@ -17,8 +17,8 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - [x] `auth.py` (verifikasi JWT) + `test_auth.py`
 - [x] API `/api/me`, `/api/progress`, `/api/activities`, `/api/history` + `test_api.py`
 - [x] `gamification.py` + `test_gamification.py`
-- [x] Halaman Login (Google, email, daftar, lupa kata sandi)
-- **Selesai jika:** bisa login dengan Google & email di localhost dan baris `users` muncul di Supabase
+- [x] Halaman Login (email, daftar, lupa kata sandi; login Google dihapus)
+- **Selesai jika:** bisa login dengan email di localhost dan baris `users` muncul di Supabase
 
 ## Fase 2 — Kerangka UI & PWA
 - [x] `tokens.css`, `base.css`, `layout.css` sesuai DESAIN.md
@@ -50,7 +50,7 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - **Selesai jika:** login di perangkat lain menampilkan data yang sama
 
 ## Fase 6 — Deploy & Uji Perangkat
-- [ ] Deploy ke Render; isi env var; daftarkan URL di Supabase & Google
+- [ ] Deploy ke Render; isi env var; daftarkan URL di Supabase
 - [ ] Instal & uji di 1 Android + 1 iPhone
 - [ ] Uji offline (mode pesawat) → online → data tersinkron
 - [x] `backup_db.py` dibuat

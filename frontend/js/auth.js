@@ -1,4 +1,4 @@
-// Login: Supabase Auth (Google & email). Ada juga "mode uji" lokal saat Supabase belum diatur.
+// Login: Supabase Auth (email + kata sandi). Ada juga "mode uji" lokal saat Supabase belum diatur.
 import { getSupabase } from './supabaseClient.js';
 
 const DEV_KEY = 'persegi.devSession';
@@ -64,16 +64,6 @@ export async function refreshToken() {
   const sb = await getSupabase();
   const { data } = await sb.auth.refreshSession();
   return data.session?.access_token || null;
-}
-
-export async function loginGoogle() {
-  const sb = await getSupabase();
-  // Redirect (bukan popup) agar berjalan di aplikasi terpasang & iPhone.
-  const { error } = await sb.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: `${location.origin}/`, queryParams: { prompt: 'select_account' } },
-  });
-  if (error) throw new Error(friendlyError(error));
 }
 
 export async function loginEmail(email, password) {

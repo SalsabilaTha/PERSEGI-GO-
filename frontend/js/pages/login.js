@@ -1,14 +1,6 @@
-// Halaman login: Google, email + kata sandi, daftar, lupa kata sandi.
+// Halaman login: email + kata sandi, daftar, lupa kata sandi.
 import * as auth from '../auth.js';
-import { h, mount, logoSvg, s } from '../ui.js';
-
-function googleIcon() {
-  return s('svg', { viewBox: '0 0 48 48', 'aria-hidden': 'true' },
-    s('path', { fill: '#FFC107', d: 'M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z' }),
-    s('path', { fill: '#FF3D00', d: 'M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z' }),
-    s('path', { fill: '#4CAF50', d: 'M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z' }),
-    s('path', { fill: '#1976D2', d: 'M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z' }));
-}
+import { h, mount, logoSvg } from '../ui.js';
 
 const val = (form, id) => form.querySelector(`#${id}`).value;
 
@@ -76,8 +68,6 @@ export function renderLogin(root, opts) {
         });
       });
       return h('div', {},
-        googleButton(),
-        h('div', { class: 'divider' }, 'atau dengan email'),
         form,
         h('div', { class: 'btn-row spread', style: { marginTop: '10px' } },
           h('button', { class: 'link-button', type: 'button', onclick: () => switchTo('forgot') }, 'Lupa kata sandi?'),
@@ -109,8 +99,6 @@ export function renderLogin(root, opts) {
       });
       return h('div', {},
         h('h2', {}, 'Buat akun'),
-        googleButton('Daftar dengan Google'),
-        h('div', { class: 'divider' }, 'atau dengan email'),
         form,
         h('p', { class: 'center small', style: { marginTop: '12px' } }, 'Sudah punya akun? ',
           h('button', { class: 'link-button', type: 'button', onclick: () => switchTo('login') }, 'Masuk')));
@@ -153,12 +141,6 @@ export function renderLogin(root, opts) {
     },
   };
 
-  function googleButton(text = 'Masuk dengan Google') {
-    const btn = h('button', { class: 'btn google-btn', type: 'button' }, googleIcon(), text);
-    btn.addEventListener('click', () => busy(btn, () => auth.loginGoogle()));
-    return btn;
-  }
-
   function devForm() {
     const form = h('form', { novalidate: true },
       field('name', 'Nama panggilan', { type: 'text', maxlength: 40, value: 'Penjelajah' }),
@@ -174,7 +156,7 @@ export function renderLogin(root, opts) {
     return h('div', {},
       h('div', { class: 'dev-banner' },
         h('b', {}, 'Mode uji lokal. '),
-        'Supabase belum diatur, jadi login Google/email belum aktif. Isi SUPABASE_URL di file .env (lihat docs/SETUP_AKUN.md).'),
+        'Supabase belum diatur, jadi login email belum aktif. Isi SUPABASE_URL di file .env (lihat docs/SETUP_AKUN.md).'),
       form);
   }
 
