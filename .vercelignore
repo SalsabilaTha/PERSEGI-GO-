@@ -1,0 +1,12 @@
+# File yang TIDAK diunggah ke Vercel
+.env
+.venv/
+.venv-1/
+instance/
+backups/
+tests/
+docs/
+scripts/
+__pycache__/
+*.pyc
+.pytest_cache/

@@ -9,7 +9,7 @@ from sqlalchemy import (
     SmallInteger, String, Table, UniqueConstraint, create_engine, text,
 )
 from sqlalchemy.engine import Engine
-from sqlalchemy.pool import StaticPool
+from sqlalchemy.pool import NullPool, StaticPool
 
 # BIGINT di Postgres, INTEGER di SQLite (agar autoincrement SQLite berjalan).
 BigId = BigInteger().with_variant(Integer(), "sqlite")
@@ -92,13 +92,20 @@ def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def make_engine(url: str) -> Engine:
+def make_engine(url: str, serverless: bool = False) -> Engine:
     if url.startswith("sqlite"):
         kwargs = {"connect_args": {"check_same_thread": False}}
         if url in ("sqlite://", "sqlite:///:memory:"):
             kwargs["poolclass"] = StaticPool  # satu koneksi bersama untuk tes in-memory
+        elif serverless:
+            kwargs["poolclass"] = NullPool
         return create_engine(url, **kwargs)
-    # pool_pre_ping: koneksi lama ke Supabase bisa terputus saat server tidur.
+    if serverless:
+        # Vercel (serverless): banyak instance berumur pendek. Tanpa pool di aplikasi; pooling
+        # diserahkan ke Supabase Transaction pooler (port 6543). prepare_threshold=None
+        # mematikan prepared statement yang tidak didukung pgbouncer mode transaksi.
+        return create_engine(url, poolclass=NullPool, connect_args={"prepare_threshold": None})
+    # Server biasa (Render/lokal). pool_pre_ping: koneksi lama ke Supabase bisa terputus saat server tidur.
     return create_engine(url, pool_pre_ping=True, pool_size=3, max_overflow=2)
 
 

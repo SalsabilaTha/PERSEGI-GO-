@@ -39,6 +39,8 @@ def load_config() -> dict:
         "SUPABASE_ANON_KEY": os.getenv("SUPABASE_ANON_KEY", "").strip(),
         "SUPABASE_JWT_SECRET": os.getenv("SUPABASE_JWT_SECRET", "").strip(),
         "DATABASE_URL": _normalize_db_url(db_url),
+        # Vercel otomatis mengisi env VERCEL=1. Mode serverless: koneksi DB tanpa pool.
+        "DB_SERVERLESS": bool(os.getenv("VERCEL")) or os.getenv("DB_SERVERLESS", "") == "1",
         # Mode uji lokal: hanya aktif bila Supabase belum diatur dan bukan production.
         "DEV_LOGIN": app_env != "production" and not supabase_url,
         "DEV_JWT_SECRET": "persegi-go-dev-only-secret-0123456789abcdef",

@@ -29,7 +29,7 @@ Ciri utama:
 | [docs/DESAIN.md](docs/DESAIN.md) | Design system PERSEGI GO!, layout, wireframe tiap layar, aturan CLT |
 | [docs/ARSITEKTUR.md](docs/ARSITEKTUR.md) | Stack, struktur folder, API, database, auth, PWA, offline |
 | [docs/KONTEN_MATERI.md](docs/KONTEN_MATERI.md) | Materi, kuis, bank soal, miskonsepsi, XP & lencana |
-| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, GitHub, Render |
+| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, GitHub, Vercel (Render cadangan) |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Tahapan pengerjaan dan checklist |
 
 Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila ragu.
@@ -43,7 +43,7 @@ Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila
 | Auth | **Supabase Auth** (Email/Password saja) via `supabase-js` v2 |
 | Frontend | **HTML + CSS + JavaScript ES Modules**, tanpa framework, tanpa npm, tanpa build tool |
 | PWA | `manifest.webmanifest` + `sw.js` + ikon PNG |
-| Hosting | **Render** (Web Service gratis) |
+| Hosting | **Vercel** (fungsi serverless Python, `api/index.py` + `vercel.json`, region `sin1`); **Render** (`render.yaml`) sebagai cadangan |
 | Tutor AI | **DeepSeek** `deepseek-chat` (API kompatibel OpenAI), dipanggil **hanya dari Flask** (`backend/tutor.py`, `urllib` bawaan) |
 
 Aturan:
@@ -116,7 +116,10 @@ Tanpa `.env` (SUPABASE_URL kosong, APP_ENV bukan production) aplikasi berjalan d
 lokal**: login memakai nama + email bebas lewat `/api/dev-login`, dan database adalah SQLite di
 `instance/persegi.db`. Mode ini otomatis mati di production.
 
-Uji instal PWA di HP memerlukan HTTPS, jadi gunakan URL hasil deploy Render.
+Uji instal PWA di HP memerlukan HTTPS, jadi gunakan URL hasil deploy Vercel.
+Di Vercel (env `VERCEL` terisi otomatis) koneksi database memakai `NullPool`; `DATABASE_URL`
+harus memakai Supabase **Transaction pooler (port 6543)**. Jangan menyimpan state penting di
+memori proses (instance serverless berumur pendek); simpan di database.
 Setiap kali file frontend berubah, naikkan `VERSION` di `frontend/sw.js` agar cache diperbarui.
 
 ## 9. Yang TIDAK Boleh Dilakukan
@@ -139,7 +142,7 @@ Setiap kali file frontend berubah, naikkan `VERSION` di `frontend/sw.js` agar ca
 - Hindari trial-and-error: Tebak Sisinya meminta perkiraan dulu (patokan 10 × 10 = 100).
 
 **Aturan Tutor AI (wajib):**
-1. `DEEPSEEK_API_KEY` hanya di server (`.env`/Render). `/config.js` hanya mengirim `aiEnabled`.
+1. `DEEPSEEK_API_KEY` hanya di server (`.env` / Environment Variables Vercel). `/config.js` hanya mengirim `aiEnabled`.
 2. **Jangan pernah kirim identitas siswa** (nama, email, id) ke DeepSeek. Hanya soal, tahap,
    kode kesalahan, isian, dan percakapan.
 3. Tutor **tidak memberi jawaban akhir**. System prompt di `backend/tutor.py` (`SYSTEM_PROMPT`)

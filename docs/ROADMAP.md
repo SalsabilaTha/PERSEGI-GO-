@@ -7,7 +7,7 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - [x] Dokumen perencanaan v0.2 (CLAUDE.md, PRD, DESAIN, ARSITEKTUR, KONTEN_MATERI, SETUP_AKUN, ROADMAP)
 - [ ] Review dokumen bersama dosen pembimbing
 - [ ] Buat proyek Supabase, aktifkan login Email (SETUP_AKUN §1–4)
-- [ ] Buat akun GitHub & Render (SETUP_AKUN §6–7)
+- [ ] Buat akun GitHub & Vercel (SETUP_AKUN §6–7)
 - [ ] Instal Python 3.12 (disarankan untuk kecocokan library)
 - **Selesai jika:** semua nilai 📋 sudah tercatat
 
@@ -50,7 +50,8 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - **Selesai jika:** login di perangkat lain menampilkan data yang sama
 
 ## Fase 6 — Deploy & Uji Perangkat
-- [ ] Deploy ke Render; isi env var; daftarkan URL di Supabase
+- [x] Konfigurasi Vercel (`vercel.json`, `api/index.py`, `.vercelignore`) — branch `deploy-vercel`
+- [ ] Deploy ke Vercel; isi Environment Variables (SETUP_AKUN §7c); daftarkan URL di Supabase
 - [ ] Instal & uji di 1 Android + 1 iPhone
 - [ ] Uji offline (mode pesawat) → online → data tersinkron
 - [x] `backup_db.py` dibuat

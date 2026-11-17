@@ -1,4 +1,4 @@
-# SETUP AKUN — Supabase, GitHub, dan Render
+# SETUP AKUN — Supabase, GitHub, dan Vercel
 
 Panduan ini dikerjakan **sendiri oleh Salsabila** (butuh login ke akun pribadi). Semua layanan
 gratis. Catat nilai-nilai yang ditandai 📋 karena akan diisi ke file `.env`.
@@ -44,10 +44,11 @@ biarkan Google dan provider lain **tidak aktif**, supaya tidak ada jalur login l
 ## 4. Supabase: URL Aplikasi
 
 **Authentication → URL Configuration**
-- Site URL: `https://<nama-app>.onrender.com` (sementara bisa `http://localhost:5000`)
+- Site URL: `https://<nama-proyek>.vercel.app` (sementara bisa `http://localhost:5000`)
 - Redirect URLs (tambahkan semua):
   - `http://localhost:5000/**`
-  - `https://<nama-app>.onrender.com/**`
+  - `https://<nama-proyek>.vercel.app/**`
+  - (bila memakai Render) `https://<nama-app>.onrender.com/**`
 
 ## 5. File `.env` Lokal
 
@@ -70,7 +71,7 @@ Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + log
    tetap pantau saldo).
 3. **API keys → Create new API key** → beri nama `persegi-go` → salin kunci `sk-...` 📋.
    Kunci hanya ditampilkan sekali.
-4. Isi `DEEPSEEK_API_KEY=sk-...` di `.env` (lokal) dan di **Environment** Render (produksi).
+4. Isi `DEEPSEEK_API_KEY=sk-...` di `.env` (lokal) dan di **Environment Variables** Vercel (produksi, §7c).
 5. Jalankan aplikasi, buka **Tutor AI**, lalu tanyakan sesuatu. Subjudul panel harus menampilkan
    "Pembimbing berpikir…", bukan "Mode petunjuk bawaan".
 
@@ -83,7 +84,63 @@ Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + log
 2. Pastikan `.gitignore` berisi `.env`, `.venv/`, `__pycache__/`.
 3. Unggah kode (lewat VS Code: Source Control → Publish to GitHub).
 
-## 7. Render (Hosting)
+## 7. Vercel (Hosting utama)
+
+Vercel menjalankan Flask sebagai **fungsi serverless** (`api/index.py`, diatur `vercel.json`).
+Keuntungannya dibanding Render gratis: tidak ada jeda 30–60 detik saat server "bangun".
+
+### 7a. Siapkan koneksi database untuk serverless
+Di Supabase → **Connect** → tab **Transaction pooler** (port **6543**, bukan Session pooler 5432)
+→ salin URI 📋. Ganti `[YOUR-PASSWORD]` lalu ubah awalan menjadi `postgresql+psycopg://`.
+Contoh: `postgresql+psycopg://postgres.abcd1234:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres`
+
+> Mengapa 6543? Banyak fungsi Vercel bisa berjalan bersamaan. Transaction pooler membagi koneksi
+> sehingga batas koneksi Supabase tidak habis. Aplikasi otomatis mematikan pool internal dan
+> prepared statement saat berjalan di Vercel (`backend/db.py`).
+
+### 7b. Impor proyek
+1. Buka https://vercel.com → **Sign up with GitHub**.
+2. **Add New… → Project** → pilih repo `persegi-go` → **Import**.
+3. **Framework Preset: Other**. Build/Output command dibiarkan kosong; `vercel.json` sudah
+   mengatur semuanya (region Singapura `sin1`, batas waktu fungsi 60 detik).
+4. Pilih branch yang akan di-deploy (**Settings → Git → Production Branch**). Branch berisi
+   konfigurasi Vercel adalah `deploy-vercel`, sampai digabung ke `main`.
+
+### 7c. Environment Variables (pindahkan dari `.env`)
+**Settings → Environment Variables** → tambahkan satu per satu (Environment: Production + Preview).
+Salin **nilainya dari `.env` Anda sendiri**; jangan dibagikan ke orang lain.
+
+| Nama | Nilai |
+|---|---|
+| `APP_ENV` | `production` |
+| `FLASK_SECRET_KEY` | teks acak panjang (boleh sama dengan di `.env`) |
+| `SUPABASE_URL` | dari `.env` |
+| `SUPABASE_ANON_KEY` | dari `.env` |
+| `SUPABASE_JWT_SECRET` | dari `.env` |
+| `DATABASE_URL` | **URI Transaction pooler port 6543** (langkah 7a), bukan yang 5432 |
+| `DEEPSEEK_API_KEY` | dari `.env` (`sk-...`) |
+| `DEEPSEEK_MODEL` | `deepseek-chat` |
+
+Tidak perlu mengisi `VERCEL`, karena Vercel mengisinya otomatis.
+
+### 7d. Deploy dan daftarkan URL
+1. **Deployments → Redeploy** (atau push ke branch produksi). URL Anda menjadi
+   `https://<nama-proyek>.vercel.app`.
+2. Kembali ke **Supabase §4** dan tambahkan URL Vercel ke **Site URL** dan **Redirect URLs**
+   (`https://<nama-proyek>.vercel.app/**`). Tanpa ini, tautan verifikasi email tidak bisa kembali ke aplikasi.
+3. Cek: buka URL → daftar akun → buka **Tutor AI**. Subjudul panel harus "Pembimbing berpikir…".
+4. Bila ada error: **Deployments → (deploy terakhir) → Functions/Logs**.
+
+Catatan Vercel:
+- Batas waktu fungsi `maxDuration: 60` detik. Bila paket Anda membatasi lebih kecil, cek di
+  **Settings → Functions**. Panggilan DeepSeek dibatasi 25 detik.
+- Batas 20 pertanyaan tutor / 10 menit tersimpan di database, jadi tetap berlaku. Batas umum
+  60 request/menit di `auth.py` tersimpan di memori tiap instance, jadi di Vercel sifatnya longgar.
+- Paket **Hobby** gratis untuk penggunaan non-komersial (cocok untuk tugas kuliah/penelitian).
+
+## 7-alt. Render (cadangan)
+
+Konfigurasi Render (`render.yaml`) tetap tersedia bila suatu saat ingin kembali ke Render.
 
 1. Buka https://render.com → daftar dengan GitHub.
 2. **New → Web Service** → pilih repo `persegi-go`.
@@ -93,18 +150,17 @@ Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + log
    - Start command: `gunicorn "backend:create_app()"`
    - Instance type: **Free**
 3. **Environment** → tambahkan semua variabel dari `.env` (kecuali yang khusus lokal), serta
-   `PYTHON_VERSION=3.12.7`.
+   `PYTHON_VERSION=3.12.7`. Di Render, `DATABASE_URL` boleh memakai Session pooler (port 5432).
 4. **Deploy**. Setelah selesai, Anda mendapat URL `https://<nama-app>.onrender.com`.
-5. Kembali ke **Supabase §4**, lalu pastikan URL ini sudah terdaftar (tautan verifikasi dan
-   atur ulang kata sandi di email akan mengarah ke sini).
+5. Kembali ke **Supabase §4**, lalu pastikan URL ini sudah terdaftar.
 
 Catatan: layanan gratis Render **tertidur setelah 15 menit** tanpa pengunjung, sehingga akses
-pertama setelahnya lambat (±30–60 detik). Aplikasi tetap tampil dari cache; data dikirim saat server bangun.
+pertama setelahnya lambat (±30–60 detik).
 
 ## 8. Uji Instal di HP
 
 ### Android (Chrome)
-1. Buka `https://<nama-app>.onrender.com`.
+1. Buka `https://<nama-proyek>.vercel.app`.
 2. Tekan tombol **＋** di header, atau menu ⋮ → **Instal aplikasi**.
 3. Ikon PERSEGI GO! muncul di layar utama.
 

@@ -43,16 +43,29 @@ pytest
 Tes memeriksa rumus, kebenaran semua jawaban bank soal & kuis, aturan XP/lencana, keamanan login,
 dan API (termasuk data antar-siswa yang terpisah).
 
+## Deploy (Vercel)
+
+Aplikasi di-deploy ke **Vercel** sebagai fungsi serverless Python:
+- `api/index.py`: entrypoint (aplikasi Flask yang sama dengan `app.py`)
+- `vercel.json`: region Singapura (`sin1`), batas waktu fungsi 60 detik, semua path diarahkan ke Flask
+- `.vercelignore`: `.env`, `.venv`, tes, dan dokumen tidak diunggah
+
+Langkah lengkap (impor repo, Environment Variables termasuk `DEEPSEEK_API_KEY`, Supabase
+Transaction pooler port 6543) ada di [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) §7.
+Konfigurasi Render (`render.yaml`) tetap tersedia sebagai cadangan.
+
 ## Memasang di HP
 
-Setelah di-deploy ke Render (alamat `https://…`):
+Setelah di-deploy ke Vercel (alamat `https://…vercel.app`):
 - **Android (Chrome):** tekan tombol **＋** di pojok kanan atas → Instal.
 - **iPhone (Safari):** Bagikan → **Tambah ke Layar Utama**.
 
 ## Struktur
 
 ```
-app.py              titik masuk Flask
+app.py              titik masuk Flask (lokal)
+api/index.py        titik masuk Vercel
+vercel.json         konfigurasi Vercel
 backend/            API, login (JWT Supabase), database, XP & lencana
 frontend/           HTML, CSS, JavaScript, service worker, manifest, ikon
 content/            materi, kuis, soal, lencana (JSON, dipakai Python & JS)

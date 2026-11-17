@@ -288,6 +288,15 @@ Manual: Lighthouse (PWA installable), uji 360 px, uji offline (mode pesawat), uj
 
 ## 12. Deploy (ringkas; detail di SETUP_AKUN.md)
 
+**Utama: Vercel (serverless).** `vercel.json` mengarahkan semua path ke `api/index.py` (Flask),
+region `sin1` (dekat Supabase Singapura), `maxDuration` 60 detik (panggilan DeepSeek ≤ 25 detik),
+`includeFiles` untuk `backend/`, `frontend/`, `content/`. Saat env `VERCEL` ada,
+`make_engine(serverless=True)` memakai `NullPool` + `prepare_threshold=None`; `DATABASE_URL`
+memakai Supabase Transaction pooler (6543). Batas tutor tersimpan di DB (aman lintas instance);
+batas umum 60 request/menit di `auth.py` bersifat per-instance.
+
+**Cadangan: Render** (langkah di bawah, `render.yaml`).
+
 1. Jalankan `schema.sql` di SQL Editor Supabase.
 2. Push ke GitHub → Render "New Web Service" → build `pip install -r requirements.txt`,
    start `gunicorn "backend:create_app()"`.

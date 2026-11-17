@@ -38,7 +38,7 @@ def create_app(overrides: dict | None = None) -> Flask:
     if overrides:
         app.config.update(overrides)
 
-    engine = make_engine(app.config["DATABASE_URL"])
+    engine = make_engine(app.config["DATABASE_URL"], serverless=app.config["DB_SERVERLESS"])
     init_db(engine)
     app.extensions["db_engine"] = engine
     app.register_blueprint(api_bp)
