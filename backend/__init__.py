@@ -63,6 +63,8 @@ def create_app(overrides: dict | None = None) -> Flask:
             "mode": "dev" if app.config["DEV_LOGIN"] else "supabase",
             "supabaseUrl": app.config["SUPABASE_URL"],
             "supabaseAnonKey": app.config["SUPABASE_ANON_KEY"],
+            # Hanya status AI; kunci DeepSeek tidak pernah dikirim ke browser.
+            "aiEnabled": bool(app.config["DEEPSEEK_API_KEY"]),
         }
         body = f"window.APP_CONFIG = {json.dumps(cfg)};\n"
         return Response(body, mimetype="application/javascript",

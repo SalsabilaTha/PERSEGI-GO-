@@ -56,6 +56,9 @@ def test_modul_lengkap():
     assert [m["id"] for m in modules] == ["m1", "m2", "m3", "m4", "m5", "m6"]
     for m in modules:
         assert len(m["remember"]) == 3
+        # Unsur RMT: tujuan (intensionalitas), konsep sehari-hari, makna, transendensi
+        for key in ("goal", "everyday", "meaning", "transcend"):
+            assert m.get(key), (m["id"], key)
         assert m["steps"]
         for step in m["steps"]:
             assert len(step["text"]) <= 3, (m["id"], step["title"])

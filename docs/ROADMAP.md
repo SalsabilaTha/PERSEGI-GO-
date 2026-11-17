@@ -55,6 +55,17 @@ Centang `[x]` setiap tugas yang selesai. Setiap fase punya kriteria "selesai jik
 - [ ] Uji offline (mode pesawat) → online → data tersinkron
 - [x] `backup_db.py` dibuat
 
+## Fase 6b — Tutor AI (DeepSeek) & Model RMT
+- [x] `backend/tutor.py`: prompt RMT + CLT, panggilan DeepSeek, penjaga jawaban, fallback
+- [x] Endpoint `/api/tutor` + `/api/tutor/history`, tabel `tutor_messages`, batas permintaan
+- [x] Panel Kak Tutor di latihan, menu Tutor AI, tombol bulat, kartu di Beranda
+- [x] Latihan bergaya fase RMT + tahap 6 Refleksi
+- [x] Materi: Tujuan & Makna, Transendensi; tabel kuadrat M5; tabel s–K–L; Tebak Sisinya dengan perkiraan
+- [x] Tes otomatis (`test_tutor.py`, DeepSeek di-mock)
+- [ ] Buat API key DeepSeek & isi saldo (SETUP_AKUN §5b)
+- [ ] Uji nyata dengan beberapa soal: tidak membocorkan jawaban, bahasa sesuai SMP
+- [ ] Review prompt bersama dosen
+
 ## ▶ Fase 7 — Uji Coba Siswa & Evaluasi
 - [ ] Izin sekolah/orang tua
 - [ ] Pretest → pemakaian aplikasi → posttest

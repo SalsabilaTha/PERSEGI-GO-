@@ -58,9 +58,24 @@ SUPABASE_URL=https://abcd1234.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 SUPABASE_JWT_SECRET=...
 DATABASE_URL=postgresql+psycopg://postgres.abcd1234:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
+DEEPSEEK_API_KEY=sk-...
 FLASK_SECRET_KEY=isi-acak-panjang
 ```
 Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + login.
+
+## 5b. DeepSeek (Tutor AI)
+
+1. Buka https://platform.deepseek.com → daftar/masuk.
+2. **Top up** saldo (layanan berbayar per pemakaian; biaya per pertanyaan sangat kecil, tetapi
+   tetap pantau saldo).
+3. **API keys → Create new API key** → beri nama `persegi-go` → salin kunci `sk-...` 📋.
+   Kunci hanya ditampilkan sekali.
+4. Isi `DEEPSEEK_API_KEY=sk-...` di `.env` (lokal) dan di **Environment** Render (produksi).
+5. Jalankan aplikasi, buka **Tutor AI**, lalu tanyakan sesuatu. Subjudul panel harus menampilkan
+   "Pembimbing berpikir…", bukan "Mode petunjuk bawaan".
+
+> Kunci DeepSeek bersifat RAHASIA. Jangan menaruhnya di file frontend atau GitHub. Bila kunci
+> kosong atau saldo habis, aplikasi otomatis memakai petunjuk bawaan.
 
 ## 6. GitHub
 

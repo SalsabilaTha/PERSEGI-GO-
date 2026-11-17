@@ -1,6 +1,6 @@
 /* Service worker PERSEGI GO!: membuat aplikasi bisa dipasang & dibuka offline.
    Naikkan VERSION setiap kali file aplikasi berubah. */
-const VERSION = 'persegi-go-v2';
+const VERSION = 'persegi-go-v3';
 const APP_CACHE = `${VERSION}-app`;
 const CDN_CACHE = `${VERSION}-cdn`;
 
@@ -12,9 +12,9 @@ const APP_FILES = [
   '/js/main.js', '/js/router.js', '/js/ui.js', '/js/state.js', '/js/auth.js', '/js/api.js',
   '/js/outbox.js', '/js/install.js', '/js/content.js', '/js/supabaseClient.js',
   '/js/core/geometry.js', '/js/core/checker.js', '/js/core/messages.js',
-  '/js/components/visuals.js',
+  '/js/components/visuals.js', '/js/components/tutorPanel.js',
   '/js/pages/login.js', '/js/pages/beranda.js', '/js/pages/materi.js', '/js/pages/eksplorasi.js',
-  '/js/pages/kuis.js', '/js/pages/latihan.js', '/js/pages/progres.js',
+  '/js/pages/kuis.js', '/js/pages/latihan.js', '/js/pages/progres.js', '/js/pages/tutor.js',
   '/content/modules.json', '/content/quiz.json', '/content/problems.json', '/content/badges.json',
   '/assets/icons/icon-192.png', '/assets/icons/icon-512.png', '/assets/icons/apple-touch-icon.png',
 ];

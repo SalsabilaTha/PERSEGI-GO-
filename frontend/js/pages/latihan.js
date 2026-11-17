@@ -1,9 +1,11 @@
-// Latihan soal cerita 5 tahap (F2, F6, F8):
-// Pahami → Pilih rumus → Masukkan angka → Hitung + satuan → Periksa.
+// Latihan soal cerita mengikuti fase RMT (F2, F6, F8, F16, F17):
+// INPUT: Pahami → ELABORASI: Rencanakan, Masukkan angka, Hitung → OUTPUT: Periksa → Refleksi.
+// "Kak Tutor" (AI) bisa dipanggil di setiap tahap sebagai mediator.
 import { record } from '../outbox.js';
 import { state, subscribe } from '../state.js';
 import { h, mount } from '../ui.js';
 import { squareSvg, stageBar } from '../components/visuals.js';
+import { createTutorPanel } from '../components/tutorPanel.js';
 import { FORMULAS, QUANTITY_NAME, solutionSteps } from '../core/geometry.js';
 import { checkAnswer, parseNumber } from '../core/checker.js';
 import { feedbackText } from '../core/messages.js';
@@ -65,6 +67,9 @@ function renderSolver(root, problem) {
     revealed: false,
     effort: null,
     finished: false,
+    tutorCalls: 0,         // berapa kali bertanya ke Kak Tutor (data penelitian)
+    lastError: null,       // kode kesalahan terakhir di tahap ini (konteks untuk tutor)
+    lastInput: null,       // isian terakhir siswa (konteks untuk tutor)
   };
 
   const storyBox = h('div', { class: 'story' });
@@ -73,7 +78,37 @@ function renderSolver(root, problem) {
   const header = h('div');
   const hintList = h('ul', { class: 'hint-list' });
 
-  const addError = (code) => { if (!st.errors.includes(code)) st.errors.push(code); };
+  const addError = (code) => {
+    st.lastError = code;
+    if (!st.errors.includes(code)) st.errors.push(code);
+  };
+
+  // ----- Kak Tutor (AI mediator RMT) -----
+  const tutorBox = h('div', { class: 'tutor-slot', hidden: true });
+  const tutorPanel = createTutorPanel({
+    mode: 'hint',
+    problemId: problem.id,
+    context: () => ({
+      stage: st.stage,
+      error_code: st.lastError,
+      // Tingkat bantuan naik sesuai kesulitan (petunjuk dibuka / salah berulang)
+      hint_level: Math.min(3, st.hintsShown + (st.computeTries >= 2 ? 1 : 0)),
+      student_input: st.lastInput,
+    }),
+    chips: ['Aku bingung mulai dari mana', 'Apa yang perlu kuperhatikan di tahap ini?', 'Apakah langkahku sudah benar?'],
+    intro: 'Hai! Aku akan membimbingmu dengan pertanyaan, bukan memberi jawaban. Ceritakan bagian mana yang membingungkan.',
+    offlineReply: () => problem.hints[Math.min(st.hintsShown, problem.hints.length - 1)],
+    onAsk: () => { st.tutorCalls += 1; },
+  });
+  tutorBox.append(tutorPanel.el);
+
+  function openTutor(autoAsk = false) {
+    tutorBox.hidden = false;
+    tutorPanel.loadHistory();
+    tutorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (autoAsk) tutorPanel.ask('');
+    else tutorPanel.focus();
+  }
 
   // ----- cerita + penanda -----
   function drawStory() {
@@ -126,11 +161,15 @@ function renderSolver(root, problem) {
     const hintBtn = st.hintsShown < problem.hints.length && st.stage < 4
       ? h('button', { class: 'btn btn-soft', type: 'button', onclick: () => { showHint(); drawPanel(); } }, `💡 Petunjuk (${problem.hints.length - st.hintsShown})`)
       : null;
-    return h('div', { class: 'btn-row spread', style: { marginTop: '16px' } }, hintBtn || h('span'), h('div', { class: 'btn-row' }, buttons));
+    const tutorBtn = h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => openTutor(false) }, '🧭 Tanya Tutor');
+    return h('div', { class: 'btn-row spread', style: { marginTop: '16px' } },
+      h('div', { class: 'btn-row' }, hintBtn, tutorBtn), h('div', { class: 'btn-row' }, buttons));
   }
 
   function go(stage) {
     st.stage = stage;
+    st.lastError = null;
+    st.lastInput = null;
     drawHeader();
     drawStory();
     drawPanel();
@@ -214,7 +253,7 @@ function renderSolver(root, problem) {
       return btn;
     });
     return [
-      h('h2', {}, '2. Pilih rumus'),
+      h('h2', {}, '2. Rencanakan: pilih rumus'),
       h('div', { class: 'guide-q' }, guide),
       h('div', { class: 'formula-options' }, options),
       prefilled ? h('p', { class: 'small muted' }, 'Rumus sudah dipilihkan. Perhatikan alasannya, lalu lanjut.') : null,
@@ -241,6 +280,7 @@ function renderSolver(root, problem) {
 
     const check = () => {
       const value = parseNumber(inputs[0].value);
+      st.lastInput = `${step.formula.text} dengan ${step.formula.use} = ${inputs[0].value}`;
       if (value === step.input) { go(3); return; }
       addError('WRONG_SUBSTITUTION');
       const where = st.planIndex > 0 ? 'Gunakan sisi yang baru saja kamu hitung.' : 'Lihat kotak Diketahui.';
@@ -291,6 +331,7 @@ function renderSolver(root, problem) {
         msg.replaceChildren(feedbackBox('info', feedbackText(code)));
         return;
       }
+      st.lastInput = `${filledTemplate} = ${input.value} ${unit}`;
       st.totalTries += 1;
       if (code === 'CORRECT') {
         msg.replaceChildren(feedbackBox('ok', h('b', {}, `Benar! ${filledTemplate} = ${step.result} ${step.unit}`)));
@@ -307,6 +348,11 @@ function renderSolver(root, problem) {
         parts.push(' Lihat petunjuk di bawah.');
       }
       msg.replaceChildren(feedbackBox('no', parts.join('')));
+      if (st.computeTries === 2) {
+        // Mediasi: tawarkan bimbingan tutor sebelum cara lengkap ditunjukkan
+        msg.append(h('button', { class: 'btn btn-soft', type: 'button', style: { marginTop: '10px' }, onclick: () => openTutor(true) },
+          '🧭 Mau dibimbing Kak Tutor?'));
+      }
       if (st.computeTries >= 3) {
         // Bantuan tingkat 3: tunjukkan cara lengkap (DS02)
         st.revealed = true;
@@ -355,7 +401,7 @@ function renderSolver(root, problem) {
     }, String(i + 1))));
     drawEffort();
 
-    const finishBtn = h('button', { class: 'btn btn-primary', type: 'button', onclick: finish }, 'Selesai ✓');
+    const nextBtn = h('button', { class: 'btn btn-primary', type: 'button', onclick: () => go(5) }, 'Lanjut ke refleksi ›');
 
     return [
       h('h2', {}, '5. Periksa: apakah masuk akal?'),
@@ -370,22 +416,60 @@ function renderSolver(root, problem) {
       h('div', { style: { marginTop: '16px' } },
         h('b', {}, 'Seberapa berat kamu berpikir tadi? '), h('span', { class: 'small muted' }, '(1 = sangat ringan, 9 = sangat berat, boleh dilewati)'),
         effort),
-      h('div', { class: 'btn-row', style: { marginTop: '16px', justifyContent: 'flex-end' } }, finishBtn),
+      nav(nextBtn),
     ];
+  }
 
-    async function finish() {
-      finishBtn.disabled = true;
-      st.finished = true;
-      const res = await record('practice_done', {
-        problem_id: problem.id,
-        tries: Math.max(1, st.totalTries),
-        hints_used: st.hintsShown,
-        errors: st.errors,
-        correct: !st.revealed,
-        effort: st.effort,
-      });
-      drawDone(res);
-    }
+  // ----- tahap 6: refleksi (metakognisi + transendensi RMT) -----
+  function stageReflect() {
+    const msg = h('div', { 'aria-live': 'polite' });
+    const text = h('textarea', {
+      class: 'text-input reflect-input', rows: 3, maxlength: 500, id: 'reflect-text',
+      placeholder: 'Contoh: Aku belajar bahwa pagar dihitung dengan keliling, karena pagar ada di pinggiran…',
+    });
+    const sendBtn = h('button', { class: 'btn btn-soft', type: 'button' }, '🧭 Kirim ke Kak Tutor');
+    sendBtn.addEventListener('click', () => {
+      const value = text.value.trim();
+      if (value.length < 5) {
+        msg.replaceChildren(feedbackBox('info', 'Tulis refleksimu dulu, satu atau dua kalimat saja.'));
+        return;
+      }
+      msg.replaceChildren();
+      tutorBox.hidden = false;
+      tutorPanel.ask(value, { mode: 'reflect', stage: 5 });
+      tutorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    const finishBtn = h('button', { class: 'btn btn-primary', type: 'button', onclick: (e) => finish(e.currentTarget) }, 'Selesai ✓');
+    return [
+      h('h2', {}, '6. Refleksi'),
+      h('p', {}, 'Tulis 1–2 kalimat dengan kata-katamu sendiri:'),
+      h('ol', { class: 'reflect-q' },
+        h('li', {}, 'Apa yang kamu pelajari dari soal ini?'),
+        h('li', {}, 'Aturan apa yang berlaku untuk ', h('b', {}, 'semua'), ' persegi?')),
+      h('label', { for: 'reflect-text', class: 'sr-only' }, 'Refleksi'),
+      text,
+      h('div', { class: 'btn-row', style: { marginTop: '10px' } }, sendBtn),
+      msg,
+      h('div', { class: 'btn-row', style: { marginTop: '16px', justifyContent: 'flex-end' } },
+        h('button', { class: 'link-button', type: 'button', onclick: (e) => finish(e.currentTarget) }, 'Lewati'),
+        finishBtn),
+    ];
+  }
+
+  async function finish(button) {
+    if (st.finished) return;
+    st.finished = true;
+    if (button) button.disabled = true;
+    const res = await record('practice_done', {
+      problem_id: problem.id,
+      tries: Math.max(1, st.totalTries),
+      hints_used: st.hintsShown,
+      errors: st.errors,
+      correct: !st.revealed,
+      effort: st.effort,
+      tutor_calls: Math.min(50, st.tutorCalls),
+    });
+    drawDone(res);
   }
 
   function drawDone(res) {
@@ -393,7 +477,7 @@ function renderSolver(root, problem) {
     const next = list[list.indexOf(problem) + 1];
     const msg = res.offline ? 'Hasil tersimpan di perangkat dan akan dikirim saat online.'
       : res.xp > 0 ? `+${res.xp} XP ⭐` : st.revealed ? 'Belum dapat XP. Coba soal kembar agar makin paham.' : 'Hasil tersimpan.';
-    header.replaceChildren(stageBar(5, 4));
+    header.replaceChildren(stageBar(6, 5));
     panel.replaceChildren(
       h('div', { class: 'center' },
         h('div', { style: { fontSize: '48px' }, 'aria-hidden': 'true' }, st.revealed ? '💪' : '🎉'),
@@ -408,7 +492,7 @@ function renderSolver(root, problem) {
   }
 
   function drawPanel() {
-    const content = [stageUnderstand, stageFormula, stageSubstitute, stageCompute, stageCheck][st.stage]();
+    const content = [stageUnderstand, stageFormula, stageSubstitute, stageCompute, stageCheck, stageReflect][st.stage]();
     // mount() melewati nilai null, sedangkan replaceChildren menulis "null"
     mount(panel, content, st.hintsShown && st.stage < 4 ? hintList : null);
   }
@@ -420,7 +504,7 @@ function renderSolver(root, problem) {
       h('h1', {}, 'Soal cerita', h('span', { class: 'level-tag', style: { verticalAlign: 'middle' } }, LEVEL_NAME[problem.level]))),
     header,
     h('div', { class: 'with-aside story-first' },
-      h('div', {}, panel),
+      h('div', {}, panel, tutorBox),
       h('aside', {}, h('div', { class: 'card' }, h('span', { class: 'eyebrow' }, 'Soal'), storyBox, kaBox))));
   go(0);
 }

@@ -293,3 +293,30 @@ Manual: Lighthouse (PWA installable), uji 360 px, uji offline (mode pesawat), uj
    start `gunicorn "backend:create_app()"`.
 3. Isi env var di Render. Tambahkan URL Render ke *Redirect URLs* Supabase.
 4. Buka URL HTTPS di HP → instal.
+
+## 13. Tutor AI (DeepSeek) dan RMT
+
+```
+Browser (tutorPanel.js) ──POST /api/tutor──► Flask (api.py) ──► tutor.py ──HTTPS──► DeepSeek
+   {mode, problem_id, stage,                  validasi, batas        build_messages()     /chat/completions
+    error_code, hint_level,                   20/10 menit            (prompt RMT+CLT,     model deepseek-chat
+    student_input, message,                                           tanpa identitas)
+    history≤8}                    ◄── {reply, phase, source} ── leaks_answer() → fallback_reply()
+                                       simpan ke tutor_messages
+```
+
+| Bagian | Isi |
+|---|---|
+| `backend/tutor.py` | `SYSTEM_PROMPT` (RMT + CLT), `build_messages`, `call_deepseek` (urllib, timeout 25 s, `max_tokens` 300), `leaks_answer`, `fallback_reply`, `phase_for` |
+| `POST /api/tutor` | mode `hint` (latihan), `chat` (menu Tutor), `reflect` (tahap 6). Balasan `{reply, phase, source}` dengan `source` = `ai` atau `fallback` |
+| `GET /api/tutor/history?problem_id=` | riwayat percakapan siswa sendiri (30 terakhir) |
+| Tabel `tutor_messages` | `user_id, problem_id, mode, stage, phase, role, content, source, created_at`. RLS aktif. Ikut ekspor & hapus akun |
+| Konfigurasi | `DEEPSEEK_API_KEY` (rahasia), `DEEPSEEK_MODEL` (bawaan `deepseek-chat`), `DEEPSEEK_BASE_URL` (bawaan `https://api.deepseek.com`) |
+| Frontend | `components/tutorPanel.js`, `pages/tutor.js` (`#/tutor`), tombol bulat di Materi/Eksplorasi/Kuis |
+
+**Diagnosis fase RMT** (`phase_for`): tahap 0 → input; tahap 1–3 → elaborasi; tahap 4 → output;
+tahap 5/`reflect` → refleksi. Kode kesalahan mengoreksi fase, misalnya `WRONG_MARKING` → input dan
+`WRONG_UNIT` → output.
+
+**Penjaga jawaban**: aktif untuk mode hint/chat pada soal yang tahapnya < 4. Bila balasan memuat
+"angka jawaban + satuan" atau "= angka jawaban", balasan diganti petunjuk bawaan.

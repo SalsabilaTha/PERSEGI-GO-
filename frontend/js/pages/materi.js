@@ -69,6 +69,11 @@ export function render(root, params) {
     h('h2', { style: { marginTop: module.properties ? '20px' : 0 } }, 'Rumus penting'),
     h('div', { class: 'grid-2 stack-sm' }, module.formulas.map(formulaBox)),
     h('div', { class: 'example-box' }, h('b', {}, '💡 Contoh sederhana'), module.example),
+    // RMT – transendensi: aturan umum yang berlaku di luar contoh
+    h('div', { class: 'rmt-card transcend' },
+      h('span', { class: 'eyebrow' }, 'Transendensi'),
+      h('b', {}, '🌍 Berlaku untuk semua persegi'),
+      h('p', {}, module.transcend)),
     h('div', { class: 'btn-row' },
       finishBtn,
       nextModule
@@ -80,7 +85,16 @@ export function render(root, params) {
       h('span', { class: 'eyebrow' }, 'Ringkasan'),
       h('h3', {}, 'Ingat 3 hal ini'),
       h('ol', {}, module.remember.map((r) => h('li', {}, r))),
-      h('div', { class: 'tip-box' }, h('b', {}, '🏆 Tips belajar'), h('p', {}, module.tip))));
+      h('div', { class: 'tip-box' }, h('b', {}, '🏆 Tips belajar'), h('p', {}, module.tip)),
+      h('a', { class: 'btn btn-ghost btn-block', href: '#/tutor', style: { marginTop: '12px' } }, '🧭 Tanya Kak Tutor')));
+
+  // RMT – intensionalitas & makna: tujuan jelas, dari konsep sehari-hari ke konsep ilmiah
+  const meaningCard = h('section', { class: 'rmt-card meaning' },
+    h('span', { class: 'eyebrow' }, 'Tujuan & makna'),
+    h('div', { class: 'rmt-rows' },
+      h('div', {}, h('b', {}, '🎯 Tujuan: '), module.goal),
+      h('div', {}, h('b', {}, '🏠 Di sekitarmu: '), module.everyday),
+      h('div', {}, h('b', {}, '💡 Kenapa penting: '), module.meaning)));
 
   const tabs = h('nav', { class: 'module-tabs', 'aria-label': 'Daftar modul' });
   const drawTabs = () => {
@@ -100,7 +114,7 @@ export function render(root, params) {
       h('p', {}, module.subtitle)),
     tabs,
     h('div', { class: 'with-aside' },
-      h('div', {}, module.warmup ? warmupCard(module) : null, stepCard, summary),
+      h('div', {}, meaningCard, module.warmup ? warmupCard(module) : null, stepCard, summary),
       aside));
   drawStep();
 

@@ -18,6 +18,7 @@ def app():
         "SUPABASE_URL": TEST_SUPABASE,
         "SUPABASE_JWT_SECRET": TEST_SECRET,
         "DEV_LOGIN": False,
+        "DEEPSEEK_API_KEY": "",   # tes tidak pernah memakai DeepSeek sungguhan (dan saldo API)
     })
 
 

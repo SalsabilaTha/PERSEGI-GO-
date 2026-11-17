@@ -172,3 +172,34 @@ Setiap soal di `problems.json` memiliki: `story`, `tokens` (frasa yang bisa dita
 - Peta: 01 Kenali persegi ("Pelajari konsep dan sifatnya") · 02 Jelajahi rumus ("Ubah sisi dan amati hasilnya") · 03 Uji kemampuan ("Jawab tantangan matematika")
 - Kutipan: "Matematika bukan tentang menghafal rumus, tetapi memahami pola di sekitar kita." (Misi hari ini)
 - Sidebar: "✦ Terus berlatih! Setiap soal yang kamu selesaikan membawamu selangkah lebih dekat menjadi jago matematika." · "Belajar • Bermain • Bertumbuh"
+
+## 11. Pemetaan Rigorous Mathematical Thinking (RMT)
+
+| Konsep RMT | Wujud di aplikasi |
+|---|---|
+| Fase **Input** (persepsi jelas, kumpulkan data teliti) | Tahap 1 Pahami: tandai Diketahui/Ditanya, tulis dengan simbol |
+| Fase **Elaborasi** (bandingkan, bagian-keseluruhan, hipotesis) | Tahap 2 Rencanakan (pilih rumus), 3 Masukkan angka, 4 Hitung |
+| Fase **Output** (komunikasi tepat, tanpa coba-coba) | Tahap 5 Periksa: jawaban + satuan, cek dengan operasi kebalikan |
+| Learning Activity: analisis tugas → perencanaan → **refleksi** | Pahami → Rencanakan → Tahap 6 Refleksi |
+| Siklus **Representasi–Manipulasi–Validasi** | Tandai & gambar → substitusi & hitung → periksa |
+| MLE **intensionalitas** | Kartu "🎯 Tujuan" di awal modul |
+| MLE **makna** | Kartu "🏠 Di sekitarmu" + "💡 Kenapa penting" |
+| MLE **transendensi** | Kartu "🌍 Berlaku untuk semua persegi" + pertanyaan refleksi |
+| **Alat psikologis** (simbol, tabel, rumus, bahasa) | Kotak Diketahui/Ditanya bersimbol, tabel kuadrat (M5), tabel s–K–L (Eksplorasi), grid |
+| **Konsep sehari-hari → ilmiah** | Pembuka modul dari konteks nyata, lalu definisi & rumus |
+| Hindari **trial-and-error** | Tebak Sisinya: perkiraan dengan patokan 10 × 10 = 100 sebelum mencoba |
+| **Mediated questioning** | Kak Tutor: satu pertanyaan penuntun per balasan |
+| **Asesmen dinamis** ("cake": petunjuk bertahap) | Petunjuk tingkat 0–3 + jumlah pertanyaan ke tutor dicatat |
+
+## 12. Tujuan, Makna, dan Transendensi per Modul
+
+| Modul | Tujuan | Transendensi |
+|---|---|---|
+| M1 | Mengenali persegi dari sifat-sifatnya | 4 sisi sama + 4 sudut 90° → pasti persegi |
+| M2 | Menghitung panjang pinggiran | Semua persegi: K = 4 × s, satuan panjang |
+| M3 | Menghitung banyak kotak satuan | Semua persegi: L = s × s, satuan berpangkat dua |
+| M4 | Memilih rumus dari cerita | Mengelilingi → keliling; menutupi → luas |
+| M5 | Mencari sisi dari luas/keliling | s = K ÷ 4; s = √L; cek dengan rumus awal |
+| M6 | Soal cerita dengan langkah RMT | Pahami, rencanakan, hitung, periksa: berlaku untuk bangun lain |
+
+Teks lengkap ada di `content/modules.json` (`goal`, `everyday`, `meaning`, `transcend`).

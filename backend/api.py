@@ -6,9 +6,10 @@ from datetime import datetime, timedelta, timezone
 from flask import Blueprint, current_app, g, jsonify, request
 from sqlalchemy import delete, func, select
 
-from . import content, geometry
+from . import content, geometry, tutor
 from .auth import login_required, make_dev_token
-from .db import activities, module_progress, now_utc, practice_attempts, quiz_results, users
+from .db import (activities, module_progress, now_utc, practice_attempts, quiz_results,
+                 tutor_messages, users)
 from .gamification import Stats, earned_badges, level_for, xp_for
 
 bp = Blueprint("api", __name__, url_prefix="/api")
@@ -158,7 +159,9 @@ def validate_activity(item: dict) -> tuple[str, str, dict, datetime]:
         if not isinstance(correct, bool):
             raise InvalidActivity("correct harus true/false.")
         effort = raw.get("effort")
+        tutor_calls = raw.get("tutor_calls", 0)
         payload = {
+            "tutor_calls": _int(tutor_calls, 0, 50, "tutor_calls"),
             "problem_id": raw["problem_id"],
             "tries": _int(raw.get("tries"), 1, 50, "tries"),
             "hints_used": _int(raw.get("hints_used"), 0, 20, "hints_used"),
@@ -251,7 +254,8 @@ def post_activities():
 
 def _history_item(row) -> dict:
     p = row.payload or {}
-    keep = {k: p[k] for k in ("module_id", "quiz_id", "score", "total", "problem_id", "correct") if k in p}
+    keep = {k: p[k] for k in ("module_id", "quiz_id", "score", "total", "problem_id", "correct",
+                              "tutor_calls") if k in p}
     return {"type": row.type, "payload": keep, "xp": row.xp, "created_at": row.created_at.isoformat()}
 
 
@@ -292,6 +296,7 @@ def export():
         "progres_materi": rows(module_progress),
         "hasil_kuis": rows(quiz_results),
         "latihan": rows(practice_attempts),
+        "percakapan_tutor": rows(tutor_messages),
     }
     return jsonify(data)
 
@@ -301,10 +306,122 @@ def export():
 def delete_me():
     uid = g.user["id"]
     with _engine().begin() as conn:
-        for table in (activities, module_progress, quiz_results, practice_attempts):
+        for table in (activities, module_progress, quiz_results, practice_attempts, tutor_messages):
             conn.execute(delete(table).where(table.c.user_id == uid))
         conn.execute(delete(users).where(users.c.id == uid))
     return jsonify(ok=True)
+
+
+# ---------------------------------------------------------------- Tutor AI (RMT)
+
+def _optional_int(value, low, high, name):
+    return None if value is None else _int(value, low, high, name)
+
+
+def _validate_tutor(body: dict) -> dict:
+    mode = body.get("mode")
+    if mode not in tutor.MODES:
+        raise InvalidActivity("Mode tutor tidak dikenal.")
+    message = body.get("message")
+    if mode == "hint" and not message:
+        message = "Aku butuh bantuan di tahap ini."
+    if not isinstance(message, str) or not message.strip() or len(message) > 500:
+        raise InvalidActivity("Pesan harus diisi (maksimal 500 karakter).")
+    problem_id = body.get("problem_id")
+    problem = None
+    if problem_id is not None:
+        problem = content.problems_by_id().get(problem_id)
+        if problem is None:
+            raise InvalidActivity("Soal tidak dikenal.")
+    if mode in ("hint", "reflect") and problem is None:
+        raise InvalidActivity("Mode ini membutuhkan soal.")
+    error_code = body.get("error_code")
+    if error_code is not None and error_code not in ERROR_CODES:
+        raise InvalidActivity("Kode kesalahan tidak valid.")
+    student_input = body.get("student_input")
+    if student_input is not None and (not isinstance(student_input, str) or len(student_input) > 100):
+        raise InvalidActivity("Isian siswa tidak valid.")
+    history = body.get("history") or []
+    if not isinstance(history, list) or len(history) > 8:
+        raise InvalidActivity("Riwayat percakapan tidak valid.")
+    clean_history = []
+    for turn in history:
+        if (not isinstance(turn, dict) or turn.get("role") not in ("user", "assistant")
+                or not isinstance(turn.get("content"), str) or len(turn["content"]) > 1000):
+            raise InvalidActivity("Riwayat percakapan tidak valid.")
+        clean_history.append({"role": turn["role"], "content": turn["content"]})
+    return {
+        "mode": mode, "message": message.strip(), "problem": problem, "problem_id": problem_id,
+        "stage": _optional_int(body.get("stage"), 0, 5, "stage"),
+        "hint_level": _optional_int(body.get("hint_level"), 0, 3, "hint_level") or 0,
+        "error_code": error_code, "student_input": student_input, "history": clean_history,
+    }
+
+
+@bp.post("/tutor")
+@login_required
+def ask_tutor():
+    try:
+        req = _validate_tutor(request.get_json(silent=True) or {})
+    except InvalidActivity as exc:
+        return jsonify(error=str(exc)), 400
+
+    cfg = current_app.config
+    uid = g.user["id"]
+    since = now_utc() - timedelta(minutes=cfg["AI_RATE_WINDOW_MIN"])
+    with _engine().connect() as conn:
+        recent = conn.execute(select(func.count()).select_from(tutor_messages).where(
+            tutor_messages.c.user_id == uid, tutor_messages.c.role == "user",
+            tutor_messages.c.created_at >= since)).scalar_one()
+    if recent >= cfg["AI_RATE_LIMIT"]:
+        return jsonify(error="Kamu sudah banyak bertanya. Istirahat sebentar, lalu coba lagi ya."), 429
+
+    phase = tutor.phase_for(req["mode"], req["stage"], req["error_code"])
+    reply, source = None, "fallback"
+    if cfg["DEEPSEEK_API_KEY"]:
+        # Identitas siswa tidak ikut dikirim: hanya soal, tahap, dan isi percakapan.
+        messages = tutor.build_messages(
+            req["mode"], req["message"], req["history"], req["problem"], req["stage"],
+            req["error_code"], req["hint_level"], req["student_input"])
+        try:
+            reply = tutor.call_deepseek(messages, cfg["DEEPSEEK_API_KEY"], cfg["DEEPSEEK_MODEL"],
+                                        cfg["DEEPSEEK_BASE_URL"])
+            source = "ai"
+        except tutor.TutorError:
+            current_app.logger.warning("Tutor AI gagal dihubungi; memakai petunjuk bawaan.")
+    guarded = (req["problem"] is not None and req["mode"] != "reflect"
+               and (req["stage"] is None or req["stage"] < 4))
+    if reply and guarded and tutor.leaks_answer(reply, req["problem"]):
+        reply, source = None, "fallback"   # penjaga: AI hampir membocorkan jawaban akhir
+    if reply is None:
+        reply = tutor.fallback_reply(req["mode"], req["problem"], req["hint_level"], req["error_code"])
+
+    now = now_utc()
+    base = {"user_id": uid, "problem_id": req["problem_id"], "mode": req["mode"],
+            "stage": req["stage"], "phase": phase}
+    with _engine().begin() as conn:
+        conn.execute(tutor_messages.insert(), [
+            {**base, "role": "user", "content": req["message"][:1000], "source": None, "created_at": now},
+            {**base, "role": "assistant", "content": reply[:1000], "source": source,
+             "created_at": now + timedelta(microseconds=1)},
+        ])
+    return jsonify(reply=reply, phase=phase, source=source)
+
+
+@bp.get("/tutor/history")
+@login_required
+def tutor_history():
+    problem_id = request.args.get("problem_id")
+    cond = [tutor_messages.c.user_id == g.user["id"]]
+    cond.append(tutor_messages.c.problem_id == problem_id if problem_id
+                else tutor_messages.c.problem_id.is_(None))
+    with _engine().connect() as conn:
+        rows = conn.execute(select(tutor_messages).where(*cond)
+                            .order_by(tutor_messages.c.created_at.desc(), tutor_messages.c.id.desc())
+                            .limit(30)).mappings().all()
+    items = [{"role": r["role"], "content": r["content"], "mode": r["mode"], "phase": r["phase"]}
+             for r in reversed(rows)]
+    return jsonify(items=items)
 
 
 @bp.post("/dev-login")

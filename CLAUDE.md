@@ -17,6 +17,9 @@ Ciri utama:
 - Dibangun dengan **Python (backend Flask)** dan **JavaScript (frontend)**.
 - Tujuan pedagogis: **mengelola beban kognitif** (Cognitive Load Theory) supaya
   **literasi matematika** siswa meningkat, berdasarkan wawancara siswa S01 (06/11/2026).
+- Model pembelajaran **Rigorous Mathematical Thinking (RMT)** (Kinard & Kozulin): fase
+  Input → Elaborasi → Output, mediasi (MLE), alat psikologis, dan refleksi. Lihat §10.
+- **Tutor AI "Kak Tutor" (DeepSeek)** membimbing proses berpikir siswa tanpa memberi jawaban akhir.
 
 ## 2. Dokumen yang Harus Dibaca Sebelum Mengoding
 
@@ -41,6 +44,7 @@ Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila
 | Frontend | **HTML + CSS + JavaScript ES Modules**, tanpa framework, tanpa npm, tanpa build tool |
 | PWA | `manifest.webmanifest` + `sw.js` + ikon PNG |
 | Hosting | **Render** (Web Service gratis) |
+| Tutor AI | **DeepSeek** `deepseek-chat` (API kompatibel OpenAI), dipanggil **hanya dari Flask** (`backend/tutor.py`, `urllib` bawaan) |
 
 Aturan:
 - Flask melayani **frontend statis dan API dari satu domain** (tanpa CORS).
@@ -48,14 +52,14 @@ Aturan:
   Tabel di Supabase memakai **RLS aktif tanpa policy**.
 - CDN yang diizinkan **hanya**: `supabase-js` (versi dikunci, dari `cdn.jsdelivr.net`) dan
   Google Fonts (Nunito, DM Sans) dengan fallback font sistem. Keduanya ikut di-cache service worker.
-- Tidak ada Tutor AI / chatbot / API LLM (sudah diputuskan untuk dihapus).
+- Tutor AI hanya DeepSeek lewat server; tidak ada SDK/library AI tambahan. Aturan lengkap di §10.
 - Login **hanya email + kata sandi**. Tidak ada login Google (dihapus atas permintaan pemilik)
   maupun Sign in with Apple (berbayar).
 
 ## 4. Rahasia dan Keamanan
 
 - Semua rahasia ada di `.env` (lihat `.env.example`) dan **tidak boleh di-commit**:
-  `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_JWT_SECRET` (cadangan legacy), `FLASK_SECRET_KEY`.
+  `DATABASE_URL`, `SUPABASE_URL`, `SUPABASE_JWT_SECRET` (cadangan legacy), `FLASK_SECRET_KEY`, `DEEPSEEK_API_KEY`.
 - Frontend hanya boleh berisi `SUPABASE_URL` dan **kunci `anon`/publishable**. Keduanya disajikan
   lewat `GET /config.js` dari Flask, bukan ditulis langsung di file.
 - Kunci **`service_role` tidak boleh dipakai** di mana pun di frontend.
@@ -120,5 +124,30 @@ Setiap kali file frontend berubah, naikkan `VERSION` di `frontend/sw.js` agar ca
 - Menambahkan framework frontend, bundler, atau npm.
 - Menambahkan dependensi Python di luar `requirements.txt` tanpa izin.
 - Mengakses Supabase database langsung dari browser, atau memakai kunci `service_role` di frontend.
-- Menambahkan fitur di luar PRD (Tutor AI, leaderboard, chat) tanpa bertanya.
+- Menambahkan fitur di luar PRD (leaderboard, chat antarsiswa) tanpa bertanya.
 - Meng-commit `.env`, kredensial, atau data siswa.
+
+## 10. Tutor AI (DeepSeek) dan Model RMT
+
+**Pemetaan RMT ke aplikasi** (detail: docs/KONTEN_MATERI.md §11):
+- Latihan: **Input** (1. Pahami) → **Elaborasi** (2. Rencanakan, 3. Masukkan angka, 4. Hitung) →
+  **Output** (5. Periksa) → **Refleksi** (6). Label fase tampil di `stageBar` (`components/visuals.js`).
+- Materi: kartu **Tujuan & Makna** (konsep sehari-hari → konsep ilmiah) di awal dan kartu
+  **Transendensi** ("berlaku untuk semua persegi") di akhir. Data di `content/modules.json`
+  (`goal`, `everyday`, `meaning`, `transcend`, wajib ada, dicek `tests/test_content.py`).
+- Alat psikologis: kotak Diketahui/Ditanya bersimbol, tabel kuadrat, tabel s–K–L, grid.
+- Hindari trial-and-error: Tebak Sisinya meminta perkiraan dulu (patokan 10 × 10 = 100).
+
+**Aturan Tutor AI (wajib):**
+1. `DEEPSEEK_API_KEY` hanya di server (`.env`/Render). `/config.js` hanya mengirim `aiEnabled`.
+2. **Jangan pernah kirim identitas siswa** (nama, email, id) ke DeepSeek. Hanya soal, tahap,
+   kode kesalahan, isian, dan percakapan.
+3. Tutor **tidak memberi jawaban akhir**. System prompt di `backend/tutor.py` (`SYSTEM_PROMPT`)
+   + penjaga `leaks_answer()` (aktif untuk tahap < 4). Jangan melemahkan keduanya.
+4. Selalu ada **fallback** (`fallback_reply`) bila tidak ada kunci, offline, atau error. Aplikasi
+   harus tetap bisa dipakai tanpa AI.
+5. Balasan pendek (≤ 3 kalimat, 1 pertanyaan) agar beban kognitif rendah; bahasa SMP.
+6. Batas 20 pertanyaan / 10 menit / siswa (biaya API). Percakapan disimpan di `tutor_messages`
+   (tanpa identitas) dan ikut terhapus saat akun dihapus.
+7. Tes **tidak boleh** memanggil DeepSeek sungguhan: `conftest.py` mengosongkan kunci, dan
+   `test_tutor.py` me-mock `tutor.call_deepseek`.

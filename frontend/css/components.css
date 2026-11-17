@@ -380,3 +380,68 @@ details summary { cursor: pointer; font-weight: 700; color: var(--purple); min-h
 @keyframes trace { to { stroke-dashoffset: 0; } }
 .fill-cell { opacity: 0; animation: cell-in 0.25s ease forwards; }
 @keyframes cell-in { to { opacity: 1; } }
+
+/* ================= RMT: fase, tujuan & makna, transendensi ================= */
+.phase-line { margin: -6px 0 16px; font-size: 13px; color: var(--muted); }
+.phase-line b { letter-spacing: 0.5px; }
+.phase-line.ph-input b { color: #a66b1e; }
+.phase-line.ph-elaborasi b { color: var(--purple); }
+.phase-line.ph-output b { color: var(--green); }
+.phase-line.ph-refleksi b { color: var(--orange); }
+.stage-pill.ph-input.active { background: var(--cream); color: #a66b1e; }
+.stage-pill.ph-input.active .n { background: #d8952c; }
+.stage-pill.ph-output.active { background: var(--green-soft); color: var(--green); }
+.stage-pill.ph-output.active .n { background: var(--green); }
+.stage-pill.ph-refleksi.active { background: var(--orange-soft); color: var(--orange); }
+.stage-pill.ph-refleksi.active .n { background: var(--orange); }
+
+.rmt-card { border-radius: var(--radius-lg); padding: 16px 18px; margin-bottom: 18px; border: 1px solid var(--line); }
+.rmt-card.meaning { background: linear-gradient(135deg, #f7f6ff, #fff); border-color: var(--purple-line); }
+.rmt-card.transcend { background: var(--green-soft); border-color: #c6eedd; margin: 0 0 18px; }
+.rmt-card.transcend b { display: block; margin-bottom: 2px; }
+.rmt-card.transcend p { margin: 0; font-size: 15px; }
+.rmt-rows { display: grid; gap: 6px; font-size: 15px; }
+.estimate-box { background: var(--cream); border: 1px solid var(--cream-line); border-radius: var(--radius); padding: 14px 16px; margin: 6px 0 12px; }
+.reflect-q { padding-left: 20px; margin: 0 0 10px; }
+.reflect-input { min-height: 90px; resize: vertical; font-family: inherit; line-height: 1.5; }
+
+.table-wrap { overflow-x: auto; }
+.rmt-table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 220px; }
+.rmt-table th, .rmt-table td { border: 1px solid var(--line); padding: 6px 10px; text-align: center; }
+.rmt-table th { background: var(--purple-soft); color: var(--purple-dark); font-weight: 800; }
+.rmt-table tr.hl td { background: var(--known); font-weight: 800; }
+
+/* ================= Tutor AI ================= */
+.tutor-slot { margin-top: 18px; }
+.tutor-panel { background: var(--surface); border: 1px solid var(--purple-line); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.tutor-head { display: flex; align-items: center; gap: 10px; }
+.tutor-avatar { width: 40px; height: 40px; border-radius: 12px; background: var(--purple-soft); display: grid; place-items: center; font-size: 20px; flex: 0 0 auto; }
+.tutor-privacy { background: #f6f6fa; border-radius: 10px; padding: 8px 10px; margin: 0; color: var(--muted); }
+.tutor-messages { display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto; padding: 2px; }
+.tutor-panel.tall .tutor-messages { max-height: min(56vh, 520px); min-height: 220px; }
+.tutor-msg { max-width: 88%; border-radius: 14px; padding: 9px 12px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+.tutor-msg .who { display: block; font-size: 11px; font-weight: 800; color: var(--purple); margin-bottom: 2px; }
+.tutor-msg.assistant { background: var(--purple-soft); align-self: flex-start; border-top-left-radius: 4px; }
+.tutor-msg.user { background: var(--yellow); color: var(--yellow-ink); align-self: flex-end; border-top-right-radius: 4px; }
+.tutor-msg.fallback { background: var(--cream); }
+.tutor-msg.thinking { color: var(--muted); font-style: italic; }
+.tutor-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-btn { border: 1.5px solid var(--line); background: #fff; border-radius: 30px; padding: 6px 12px; font-size: 13px; color: var(--muted); min-height: 36px; }
+.chip-btn:hover { border-color: var(--purple-line); color: var(--purple); }
+.tutor-form { display: flex; gap: 8px; }
+.tutor-form .text-input { flex: 1; min-width: 0; }
+
+.tutor-fab {
+  position: fixed; right: 20px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 40;
+  width: 56px; height: 56px; border-radius: 18px; background: var(--purple); color: #fff;
+  display: grid; place-items: center; font-size: 26px; text-decoration: none;
+  box-shadow: 0 10px 24px rgba(73, 64, 200, 0.35);
+}
+@media (max-width: 899px) { .tutor-fab { bottom: calc(var(--bottom-nav-h) + 16px + env(safe-area-inset-bottom, 0px)); right: 16px; } }
+
+.tutor-banner {
+  display: flex; align-items: center; gap: 12px; margin-top: 16px; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--purple-line); border-radius: var(--radius-lg);
+  text-decoration: none; color: var(--ink); box-shadow: var(--shadow-sm); position: relative;
+}
+.tutor-banner .j-go { margin-left: auto; color: var(--purple); font-size: 22px; }

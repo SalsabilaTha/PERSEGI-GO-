@@ -70,7 +70,22 @@ practice_attempts = Table(
     Column("created_at", DateTime(timezone=True), nullable=False),
 )
 
-ALL_TABLES = [users, activities, module_progress, quiz_results, practice_attempts]
+# Percakapan dengan Tutor AI (data penelitian). Tanpa nama/email; ikut terhapus bersama akun.
+tutor_messages = Table(
+    "tutor_messages", metadata,
+    Column("id", BigId, primary_key=True, autoincrement=True),
+    Column("user_id", BigId, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True),
+    Column("problem_id", String(30)),          # kosong = chat bebas di menu Tutor AI
+    Column("mode", String(10), nullable=False),  # hint | chat | reflect
+    Column("stage", SmallInteger),
+    Column("phase", String(12)),               # input | elaborasi | output | refleksi | umum
+    Column("role", String(10), nullable=False),  # user | assistant
+    Column("content", String(1000), nullable=False),
+    Column("source", String(10)),              # ai | fallback (khusus balasan tutor)
+    Column("created_at", DateTime(timezone=True), nullable=False),
+)
+
+ALL_TABLES = [users, activities, module_progress, quiz_results, practice_attempts, tutor_messages]
 
 
 def now_utc() -> datetime:

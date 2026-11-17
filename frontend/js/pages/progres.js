@@ -20,7 +20,8 @@ function activityLabel(item) {
     case 'quiz_done': return `Menyelesaikan kuis: ${p.score}/${p.total} benar`;
     case 'practice_done': {
       const pr = c.problems.find((x) => x.id === p.problem_id);
-      return `${p.correct ? 'Menyelesaikan' : 'Mempelajari'} soal cerita: ${pr ? pr.context : p.problem_id}`;
+      const tutorNote = p.tutor_calls ? ` · bertanya ke Tutor ${p.tutor_calls}×` : '';
+      return `${p.correct ? 'Menyelesaikan' : 'Mempelajari'} soal cerita: ${pr ? pr.context : p.problem_id}${tutorNote}`;
     }
     case 'warmup_done': return 'Menyelesaikan pemanasan';
     default: return item.type;

@@ -282,3 +282,30 @@ Berlaku untuk Materi (mode bertahap), Eksplorasi, dan Latihan:
 - Sapa "Penjelajah"/"kamu". Nada ceria, tetapi kalimat pendek.
 - Salah: "Belum tepat. Coba cek …" (bukan "Salah!"). Benar: "Benar! …" + alasan singkat.
 - "Keliling" = panjang pinggiran; "Luas" = banyak kotak/permukaan.
+
+## 10. Tutor AI dan Elemen RMT
+
+### Panel Kak Tutor (di bawah kartu tahap latihan; juga halaman `#/tutor`)
+```
+┌ 🧭 Kak Tutor ───────────────────────────────────┐
+│ Pembimbing berpikir · tidak memberi jawaban akhir │
+│ ℹ️ Diproses DeepSeek, disimpan tanpa nama/email   │
+│ [Kak Tutor] Coba lihat kotak Ditanya…            │  ungu muda (kiri)
+│                       [Aku bingung mulai…]       │  kuning (kanan) = siswa
+│ (Aku bingung…) (Apa yang perlu…) (…?)            │  chip pertanyaan cepat
+│ [ Tulis pertanyaan…                    ] [Kirim] │
+└──────────────────────────────────────────────────┘
+```
+- Tombol **🧭 Tanya Tutor** ada di baris tombol setiap tahap (di sebelah 💡 Petunjuk).
+- Tombol bulat ungu **🧭** di kanan bawah halaman Materi, Eksplorasi, dan Kuis membuka `#/tutor`.
+  Di HP, menu bawah tetap 5 ikon agar tidak sesak.
+- Balasan dari petunjuk bawaan (fallback) memakai latar krem.
+
+### Fase RMT di latihan
+Bar tahap memakai 6 pil (Pahami, Rencanakan, Masukkan angka, Hitung + satuan, Periksa, Refleksi)
+dan baris "Fase RMT: INPUT/ELABORASI/OUTPUT/REFLEKSI". Warna fase: Input = kuning/coklat,
+Elaborasi = ungu, Output = hijau, Refleksi = oranye.
+
+### Kartu RMT di Materi
+- **Tujuan & Makna** (gradien ungu sangat muda) di atas kartu langkah.
+- **Transendensi** (hijau mint) di bawah contoh sederhana.

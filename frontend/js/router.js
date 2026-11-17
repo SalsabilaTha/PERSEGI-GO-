@@ -5,10 +5,13 @@ import * as eksplorasi from './pages/eksplorasi.js';
 import * as kuis from './pages/kuis.js';
 import * as latihan from './pages/latihan.js';
 import * as progres from './pages/progres.js';
+import * as tutor from './pages/tutor.js';
 
-const routes = { beranda, materi, eksplorasi, kuis, latihan, progres };
+const routes = { beranda, materi, eksplorasi, kuis, latihan, progres, tutor };
 // Menu mana yang menyala untuk tiap halaman
 const NAV_FOR = { latihan: 'kuis' };
+// Halaman yang menampilkan tombol bulat "Tanya Tutor" (HP tidak punya menu Tutor di bawah)
+const FAB_ON = new Set(['kuis', 'latihan', 'materi', 'eksplorasi']);
 
 let view = null;
 let cleanup = null;
@@ -31,6 +34,15 @@ export function render() {
   wrapper.className = 'page';
   view.append(wrapper);
   cleanup = page.render(wrapper, params);
+  // Di halaman soal cerita, tutor sudah ada di dalam latihan, jadi tombol bulat tidak perlu.
+  if (FAB_ON.has(name) && !(name === 'latihan' && params.length)) {
+    const fab = document.createElement('a');
+    fab.className = 'tutor-fab';
+    fab.href = '#/tutor';
+    fab.setAttribute('aria-label', 'Tanya Kak Tutor');
+    fab.textContent = '🧭';
+    view.append(fab);
+  }
 
   document.querySelectorAll('[data-nav] [data-route]').forEach((a) => {
     const active = a.dataset.route === navName;

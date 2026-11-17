@@ -76,7 +76,21 @@ function simulasi() {
     perNote.textContent = `4 × ${side}`;
     observe.textContent = `Saat sisi ${side} cm, luasnya ${area(side)} cm² sedangkan kelilingnya ${perimeter(side)} cm. ` +
       'Luas dihitung dengan mengalikan sisi dengan sisi.';
+    // Tabel s–L–K (alat berpikir RMT): melihat pola hubungan antarbesaran
+    const from = Math.max(1, Math.min(side - 2, 11));
+    slkBody.replaceChildren(...Array.from({ length: 5 }, (_, i) => {
+      const s = from + i;
+      return h('tr', { class: s === side ? 'hl' : '' },
+        h('td', {}, `${s}`), h('td', {}, `${perimeter(s)}`), h('td', {}, `${area(s)}`));
+    }));
   };
+  const slkBody = h('tbody');
+  const slkTable = h('div', { class: 'card', style: { padding: '16px' } },
+    h('b', {}, '📋 Tabel pola s – K – L'),
+    h('p', { class: 'small muted', style: { margin: '2px 0 8px' } }, 'Jika sisi bertambah 1, keliling selalu bertambah 4. Bagaimana dengan luas?'),
+    h('div', { class: 'table-wrap' }, h('table', { class: 'rmt-table' },
+      h('thead', {}, h('tr', {}, h('th', { scope: 'col' }, 's (cm)'), h('th', { scope: 'col' }, 'K = 4 × s'), h('th', { scope: 'col' }, 'L = s × s'))),
+      slkBody)));
 
   const card = h('section', { class: 'card' },
     h('div', { class: 'card-title-row' },
@@ -89,7 +103,8 @@ function simulasi() {
   const aside = h('aside', { class: 'side-stack' },
     h('div', { class: 'stat-card area' }, h('div', { class: 's-icon' }, '▦'), h('div', { class: 's-label' }, 'LUAS PERSEGI'), areaValue, areaNote),
     h('div', { class: 'stat-card perimeter' }, h('div', { class: 's-icon' }, '⟲'), h('div', { class: 's-label' }, 'KELILING PERSEGI'), perValue, perNote),
-    h('div', { class: 'card', style: { padding: '16px' } }, h('b', {}, '💡 Coba amati'), observe));
+    h('div', { class: 'card', style: { padding: '16px' } }, h('b', {}, '💡 Coba amati'), observe),
+    slkTable);
 
   update();
   return h('div', { class: 'with-aside' }, card, aside);
@@ -104,6 +119,32 @@ function tebak() {
   const feedback = h('div', { 'aria-live': 'polite' });
   const question = h('h2', {});
   let slider = h('div');
+  // RMT: hindari coba-coba. Siswa memperkirakan dulu dengan patokan 10 × 10 = 100.
+  const estimate = h('div', { class: 'estimate-box' });
+  const tryZone = h('div', { hidden: true });
+
+  const drawEstimate = () => {
+    const msg = h('p', { class: 'small', 'aria-live': 'polite' });
+    const answer = target < 100 ? 'less' : target > 100 ? 'more' : 'equal';
+    const choose = (pick) => {
+      if (pick !== answer) {
+        msg.textContent = 'Belum tepat. Bandingkan dulu angkanya dengan 100.';
+        return;
+      }
+      msg.textContent = answer === 'less' ? '✓ Tepat! Karena kurang dari 100, sisinya pasti kurang dari 10.'
+        : answer === 'more' ? '✓ Tepat! Karena lebih dari 100, sisinya pasti lebih dari 10.'
+          : '✓ Tepat! Luasnya sama dengan 10 × 10, jadi sisinya 10.';
+      tryZone.hidden = false;
+    };
+    estimate.replaceChildren(
+      h('b', {}, 'Langkah 1 · Perkirakan dulu'),
+      h('p', { style: { margin: '4px 0 8px' } }, `Patokan: 10 × 10 = 100. Luas ${target} lebih kecil, sama, atau lebih besar dari 100?`),
+      h('div', { class: 'btn-row' },
+        h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => choose('less') }, 'Lebih kecil'),
+        h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => choose('equal') }, 'Sama'),
+        h('button', { class: 'btn btn-ghost', type: 'button', onclick: () => choose('more') }, 'Lebih besar')),
+      msg);
+  };
 
   const newTarget = () => {
     let s;
@@ -112,7 +153,9 @@ function tebak() {
     side = 3;
     question.textContent = `Luas persegi = ${target} kotak. Berapa panjang sisinya?`;
     feedback.replaceChildren();
-    const fresh = sliderControl({ id: 'guess-range', label: 'Coba panjang sisi', min: 1, max: 20, value: side, unit: '', onChange: (v) => { side = v; update(); } });
+    tryZone.hidden = true;
+    drawEstimate();
+    const fresh = sliderControl({ id: 'guess-range', label: 'Langkah 2 · Susun persegi: pilih panjang sisi', min: 1, max: 20, value: side, unit: '', onChange: (v) => { side = v; update(); } });
     slider.replaceWith(fresh);
     slider = fresh;
     update();
@@ -141,11 +184,14 @@ function tebak() {
 
   const card = h('section', { class: 'card' },
     h('span', { class: 'eyebrow' }, 'Tebak sisinya · Akar kuadrat'),
-    question, stage, info, h('div', { style: { height: '10px' } }), slider,
+    question, estimate);
+  // Grid, slider, dan tombol cek baru tampil setelah perkiraan benar
+  tryZone.append(stage, info, h('div', { style: { height: '10px' } }), slider,
     h('div', { class: 'btn-row', style: { marginTop: '14px' } },
       h('button', { class: 'btn btn-primary', type: 'button', onclick: check }, 'Cek ✓'),
       h('button', { class: 'btn btn-ghost', type: 'button', onclick: newTarget }, 'Soal baru ↻')),
     feedback);
+  card.append(tryZone);
 
   const aside = h('aside', { class: 'side-stack' },
     h('div', { class: 'card', style: { padding: '16px' } },

@@ -213,14 +213,36 @@ function sortVisual(items) {
   return box;
 }
 
-const STAGES = ['Pahami', 'Pilih rumus', 'Masukkan angka', 'Hitung + satuan', 'Periksa'];
+// Tahap latihan dan fase kognitif RMT (Input → Elaborasi → Output) + Refleksi.
+export const STAGES = ['Pahami', 'Rencanakan', 'Masukkan angka', 'Hitung + satuan', 'Periksa', 'Refleksi'];
+export const STAGE_PHASE = ['input', 'elaborasi', 'elaborasi', 'elaborasi', 'output', 'refleksi'];
+export const PHASE_INFO = {
+  input: { label: 'INPUT', text: 'Kumpulkan informasi dengan teliti (Representasi)' },
+  elaborasi: { label: 'ELABORASI', text: 'Olah informasi: rencanakan & hitung (Manipulasi)' },
+  output: { label: 'OUTPUT', text: 'Sampaikan & periksa jawaban (Validasi)' },
+  refleksi: { label: 'REFLEKSI', text: 'Apa yang kamu pelajari? Aturan apa yang berlaku umum?' },
+};
 
 export function stageBar(active, done = -1) {
-  return h('ol', { class: 'stage-bar', 'aria-label': 'Tahap penyelesaian' },
-    STAGES.map((t, i) => h('li', {
-      class: `stage-pill ${i === active ? 'active' : ''} ${i <= done && i !== active ? 'done' : ''}`,
-      'aria-current': i === active ? 'step' : null,
-    }, h('span', { class: 'n' }, i < active || i <= done ? '✓' : String(i + 1)), h('span', { class: 't' }, t))));
+  const phase = STAGE_PHASE[active];
+  return h('div', {},
+    h('ol', { class: 'stage-bar', 'aria-label': 'Tahap penyelesaian' },
+      STAGES.map((t, i) => h('li', {
+        class: `stage-pill ${i === active ? 'active' : ''} ${i <= done && i !== active ? 'done' : ''} ph-${STAGE_PHASE[i]}`,
+        'aria-current': i === active ? 'step' : null,
+        title: `Fase ${PHASE_INFO[STAGE_PHASE[i]].label}`,
+      }, h('span', { class: 'n' }, i < active || i <= done ? '✓' : String(i + 1)), h('span', { class: 't' }, t)))),
+    phase ? h('p', { class: `phase-line ph-${phase}` },
+      h('b', {}, `Fase RMT: ${PHASE_INFO[phase].label}`), ` · ${PHASE_INFO[phase].text}`) : null);
+}
+
+/** Tabel kuadrat (alat berpikir/graphic organizer RMT) */
+export function squaresTable({ rows = 12, highlight = null } = {}) {
+  return h('div', { class: 'table-wrap' },
+    h('table', { class: 'rmt-table' },
+      h('thead', {}, h('tr', {}, h('th', { scope: 'col' }, 's'), h('th', { scope: 'col' }, 's × s = s²'))),
+      h('tbody', {}, Array.from({ length: rows }, (_, i) => h('tr', { class: i + 1 === highlight ? 'hl' : '' },
+        h('td', {}, String(i + 1)), h('td', {}, `${i + 1} × ${i + 1} = ${(i + 1) ** 2}`))))));
 }
 
 /** Membuat visual dari spesifikasi di modules.json */
@@ -233,6 +255,7 @@ export function renderVisual(spec) {
     case 'pick': node = pickVisual(); break;
     case 'sort': node = sortVisual(spec.items); break;
     case 'stages': node = h('div', {}, stageBar(spec.active)); break;
+    case 'table': node = squaresTable(spec); break;
     default: node = h('div');
   }
   const caption = spec.caption && spec.type !== 'formula' ? h('div', { class: 'visual-caption' }, spec.caption) : null;

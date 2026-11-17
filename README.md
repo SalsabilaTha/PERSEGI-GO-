@@ -6,6 +6,7 @@ wawancara siswa dan prinsip **Cognitive Load Theory** untuk meningkatkan literas
 - **Backend:** Python (Flask) · **Frontend:** JavaScript (tanpa framework)
 - **Login:** Supabase (email + kata sandi, termasuk Gmail/iCloud) · **Database:** Supabase PostgreSQL
 - **Bisa dipasang di HP** tanpa Play Store / App Store (PWA)
+- **Model RMT** (Rigorous Mathematical Thinking) + **Tutor AI DeepSeek** sebagai mediator berpikir
 
 Penyusun: Salsabila Thahira (2225250214), Pendidikan Matematika, kelas 3B.
 
@@ -16,7 +17,8 @@ Penyusun: Salsabila Thahira (2225250214), Pendidikan Matematika, kelas 3B.
 | Beranda | Hero, peta petualangan, progres belajar, level |
 | Materi | 6 modul bertahap (Kembali / Ulangi / Lanjut), ringkasan "Ingat 3 hal ini", pemanasan prasyarat |
 | Eksplorasi | Simulasi slider, **Tebak Sisinya** (akar kuadrat dengan grid), Kalkulator Persegi |
-| Kuis & Latihan | Kuis 5 soal (+10 XP/soal) dan 15 soal cerita 5 tahap dengan penanda informasi, deteksi miskonsepsi, dan petunjuk bertingkat |
+| Kuis & Latihan | Kuis 5 soal (+10 XP/soal) dan 15 soal cerita mengikuti fase RMT (Input → Elaborasi → Output → Refleksi) dengan penanda informasi, deteksi miskonsepsi, dan petunjuk bertingkat |
+| Tutor AI | "Kak Tutor" (DeepSeek) membimbing proses berpikir di setiap tahap soal dan lewat chat, **tanpa memberi jawaban akhir** |
 | Evaluasi & Progres | XP, lencana, riwayat aktivitas, ekspor data, keluar, hapus akun |
 
 ## Menjalankan di komputer

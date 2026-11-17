@@ -47,6 +47,12 @@ export function render(root) {
           h('p', {}, j.desc),
           h('span', { class: 'j-go', 'aria-hidden': 'true' }, '↗')))),
 
+      h('a', { class: 'tutor-banner', href: '#/tutor' },
+        h('span', { class: 'tutor-avatar', 'aria-hidden': 'true' }, '🧭'),
+        h('span', {}, h('b', {}, 'Bingung? Tanya Kak Tutor'), h('br'),
+          h('span', { class: 'small muted' }, 'Tutor AI membimbing cara berpikirmu langkah demi langkah, tanpa memberi jawaban jadi.')),
+        h('span', { class: 'j-go', 'aria-hidden': 'true' }, '›')),
+
       h('div', { class: 'grid-2 stack-sm', style: { marginTop: '18px' } },
         h('div', { class: 'card' },
           h('div', { class: 'card-title-row' },

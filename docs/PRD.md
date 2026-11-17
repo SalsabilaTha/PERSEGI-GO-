@@ -27,6 +27,18 @@ Kerangka yang dipakai: **Cognitive Load Theory (Sweller)**.
 | **Extraneous (EL)** | Beban dari penyajian | Visual menggantikan teks panjang, langkah bertahap |
 | **Germane (GL)** | Usaha membangun skema | Contoh bertahap, eksplorasi, umpan balik, refleksi |
 
+### Model pembelajaran: Rigorous Mathematical Thinking (RMT)
+Atas arahan dosen, aplikasi memakai model **RMT** (Kinard & Kozulin), yaitu sintesis teori
+sosiokultural **Vygotsky** (alat psikologis, konsep ilmiah, ZPD, Learning Activity) dan teori
+**Feuerstein** (modifikasi kognitif struktural, *Mediated Learning Experience*). Penerapannya:
+- **Fase kognitif Input → Elaborasi → Output** menjadi kerangka tahap latihan, ditambah **Refleksi**.
+- **Learning Activity**: analisis tugas (Pahami) → perencanaan tindakan (Rencanakan) → refleksi.
+- **Siklus Representasi–Manipulasi–Validasi** pada setiap soal cerita.
+- **MLE**: intensionalitas (tujuan jelas), makna (konteks sehari-hari), transendensi (aturan umum),
+  dengan **Tutor AI** sebagai mediator yang bertanya, bukan pemberi jawaban.
+- **Alat psikologis**: simbol (s, L, K), kotak Diketahui/Ditanya, tabel, grid, rumus.
+- **Konsep sehari-hari → konsep ilmiah** pada pembuka setiap modul.
+
 ## 2. Tujuan
 
 ### Tujuan pembelajaran (K01)
@@ -45,7 +57,7 @@ Kerangka yang dipakai: **Cognitive Load Theory (Sweller)**.
 - Materi dan latihan menerapkan prinsip CLT dari temuan wawancara.
 
 ### Bukan tujuan (v1)
-- Tutor AI / chatbot (diputuskan dihapus).
+- Chatbot umum di luar materi persegi (Tutor AI dibatasi pada persegi).
 - Sign in with Apple (memerlukan Apple Developer berbayar).
 - Publikasi di Play Store / App Store.
 - Bangun datar selain persegi; akar non-kuadrat sempurna.
@@ -179,6 +191,30 @@ langkah demi langkah. Ada gambar persegi berlabel `s` dan tanda siku-siku.
 - (P1) Skala usaha mental Paas 1–9 setelah latihan (data penelitian).
 - (P1) **Ekspor data** akun (JSON) dan **Hapus akun** beserta datanya.
 
+### F16. Tutor AI "Kak Tutor" berbasis RMT (P0) — *baru*
+- AI **DeepSeek** dipanggil dari server Python. Kunci API tidak pernah sampai ke browser.
+- Muncul di dua tempat: tombol **🧭 Tanya Tutor** di setiap tahap soal cerita (konteks soal, tahap,
+  kesalahan terakhir, dan tingkat bantuan dikirim otomatis) dan menu **Tutor AI** untuk tanya bebas
+  seputar persegi.
+- Syarat dari dosen:
+  1. membimbing penyelesaian masalah literasi secara bertahap;
+  2. mengelola beban kognitif (intrinsic: satu langkah per balasan; extraneous: ≤ 3 kalimat,
+     bahasa SMP; germane: pertanyaan penuntun & refleksi);
+  3. petunjuk sesuai kesulitan (tingkat 0–3), **tanpa jawaban akhir**;
+  4. mengikuti tahapan RMT (diagnosis fase Input/Elaborasi/Output);
+  5. berperan sebagai **mediator proses berpikir**.
+- **Penjaga jawaban** di server dan **petunjuk bawaan** bila AI tidak tersedia.
+- Setelah salah menghitung 2×, aplikasi menawarkan "Mau dibimbing Kak Tutor?".
+- Batas 20 pertanyaan / 10 menit / siswa.
+
+**Kriteria terima:** tutor tidak pernah menuliskan jawaban akhir sebelum tahap Periksa; balasan ≤ 3
+kalimat; aplikasi tetap berfungsi tanpa kunci API.
+
+### F17. Refleksi & Transendensi (P0) — *baru*
+- Tahap 6 **Refleksi** setelah Periksa: siswa menulis apa yang dipelajari dan aturan yang berlaku
+  untuk **semua** persegi. Kak Tutor menanggapi (mode `reflect`). Boleh dilewati.
+- Setiap modul materi memiliki kartu **Tujuan & Makna** dan **Berlaku untuk semua persegi**.
+
 ## 6. Kebutuhan Non-Fungsional
 
 | ID | Kebutuhan |
@@ -250,3 +286,8 @@ pada posttest, dengan satuan benar.
 | Proyek Supabase gratis dijeda setelah ±7 hari tanpa aktivitas | Data tetap aman; aktifkan lagi dari dashboard; jadwalkan uji coba berdekatan |
 | Siswa lupa kata sandi | Fitur reset kata sandi lewat email |
 | Siswa di bawah umur | Data minimal, tanpa nama asli wajib, ada ekspor & hapus akun, izin dari guru/orang tua untuk uji coba |
+
+| Data percakapan anak dikirim ke layanan AI luar negeri (DeepSeek) | Tanpa nama/email; pemberitahuan di panel tutor; izin sekolah/orang tua; percakapan bisa diekspor & dihapus |
+| Biaya API DeepSeek | Batas 20 pertanyaan / 10 menit / siswa; `max_tokens` 300; pantau saldo di platform.deepseek.com |
+| AI memberi jawaban akhir atau salah konsep | System prompt RMT + penjaga jawaban di server + uji manual sebelum dipakai siswa |
+| AI tidak tersedia (kunci kosong, saldo habis, offline) | Petunjuk bawaan otomatis; fitur lain tetap jalan |

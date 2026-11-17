@@ -56,6 +56,20 @@ create table if not exists practice_attempts (
 );
 create index if not exists ix_practice_attempts_user_id on practice_attempts(user_id);
 
+create table if not exists tutor_messages (
+  id          bigserial primary key,
+  user_id     bigint not null references users(id) on delete cascade,
+  problem_id  varchar(30),
+  mode        varchar(10) not null,
+  stage       smallint,
+  phase       varchar(12),
+  role        varchar(10) not null,
+  content     varchar(1000) not null,
+  source      varchar(10),
+  created_at  timestamptz not null default now()
+);
+create index if not exists ix_tutor_messages_user_id on tutor_messages(user_id);
+
 -- RLS aktif tanpa policy: tabel tidak bisa dibaca/ditulis dari browser
 -- (kunci anon/authenticated). Hanya Flask yang mengakses lewat koneksi database.
 alter table users             enable row level security;
@@ -63,3 +77,4 @@ alter table activities        enable row level security;
 alter table module_progress   enable row level security;
 alter table quiz_results      enable row level security;
 alter table practice_attempts enable row level security;
+alter table tutor_messages    enable row level security;

@@ -42,6 +42,12 @@ def load_config() -> dict:
         # Mode uji lokal: hanya aktif bila Supabase belum diatur dan bukan production.
         "DEV_LOGIN": app_env != "production" and not supabase_url,
         "DEV_JWT_SECRET": "persegi-go-dev-only-secret-0123456789abcdef",
+        # Tutor AI (DeepSeek). Kunci hanya dipakai di server, tidak pernah dikirim ke browser.
+        "DEEPSEEK_API_KEY": os.getenv("DEEPSEEK_API_KEY", "").strip(),
+        "DEEPSEEK_MODEL": os.getenv("DEEPSEEK_MODEL", "").strip() or "deepseek-chat",
+        "DEEPSEEK_BASE_URL": (os.getenv("DEEPSEEK_BASE_URL", "").strip() or "https://api.deepseek.com").rstrip("/"),
+        "AI_RATE_LIMIT": 20,          # maksimal pertanyaan ke tutor per siswa ...
+        "AI_RATE_WINDOW_MIN": 10,     # ... dalam 10 menit (mengendalikan biaya API)
         "MAX_CONTENT_LENGTH": 64 * 1024,
         "ROOT_DIR": ROOT_DIR,
     }
