@@ -289,7 +289,7 @@ Berlaku untuk Materi (mode bertahap), Eksplorasi, dan Latihan:
 ```
 ┌ 🧭 Kak Tutor ───────────────────────────────────┐
 │ Pembimbing berpikir · tidak memberi jawaban akhir │
-│ ℹ️ Diproses DeepSeek, disimpan tanpa nama/email   │
+│ ℹ️ Diproses Gemini, disimpan tanpa nama/email   │
 │ [Kak Tutor] Coba lihat kotak Ditanya…            │  ungu muda (kiri)
 │                       [Aku bingung mulai…]       │  kuning (kanan) = siswa
 │ (Aku bingung…) (Apa yang perlu…) (…?)            │  chip pertanyaan cepat

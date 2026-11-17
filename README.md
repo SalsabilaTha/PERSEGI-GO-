@@ -6,7 +6,7 @@ wawancara siswa dan prinsip **Cognitive Load Theory** untuk meningkatkan literas
 - **Backend:** Python (Flask) · **Frontend:** JavaScript (tanpa framework)
 - **Login:** Supabase (email + kata sandi, termasuk Gmail/iCloud) · **Database:** Supabase PostgreSQL
 - **Bisa dipasang di HP** tanpa Play Store / App Store (PWA)
-- **Model RMT** (Rigorous Mathematical Thinking) + **Tutor AI DeepSeek** sebagai mediator berpikir
+- **Model RMT** (Rigorous Mathematical Thinking) + **Tutor AI Gemini** sebagai mediator berpikir
 
 Penyusun: Salsabila Thahira (2225250214), Pendidikan Matematika, kelas 3B.
 
@@ -18,7 +18,7 @@ Penyusun: Salsabila Thahira (2225250214), Pendidikan Matematika, kelas 3B.
 | Materi | 6 modul bertahap (Kembali / Ulangi / Lanjut), ringkasan "Ingat 3 hal ini", pemanasan prasyarat |
 | Eksplorasi | Simulasi slider, **Tebak Sisinya** (akar kuadrat dengan grid), Kalkulator Persegi |
 | Kuis & Latihan | Kuis 5 soal (+10 XP/soal) dan 15 soal cerita mengikuti fase RMT (Input → Elaborasi → Output → Refleksi) dengan penanda informasi, deteksi miskonsepsi, dan petunjuk bertingkat |
-| Tutor AI | "Kak Tutor" (DeepSeek) membimbing proses berpikir di setiap tahap soal dan lewat chat, **tanpa memberi jawaban akhir** |
+| Tutor AI | "Kak Tutor" (Gemini) membimbing proses berpikir di setiap tahap soal dan lewat chat, **tanpa memberi jawaban akhir** |
 | Evaluasi & Progres | XP, lencana, riwayat aktivitas, ekspor data, keluar, hapus akun |
 
 ## Menjalankan di komputer
@@ -50,7 +50,7 @@ Aplikasi di-deploy ke **Vercel** sebagai fungsi serverless Python:
 - `vercel.json`: region Singapura (`sin1`), batas waktu fungsi 60 detik, semua path diarahkan ke Flask
 - `.vercelignore`: `.env`, `.venv`, tes, dan dokumen tidak diunggah
 
-Langkah lengkap (impor repo, Environment Variables termasuk `DEEPSEEK_API_KEY`, Supabase
+Langkah lengkap (impor repo, Environment Variables termasuk `GEMINI_API_KEY`, Supabase
 Transaction pooler port 6543) ada di [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) §7.
 Konfigurasi Render (`render.yaml`) tetap tersedia sebagai cadangan.
 

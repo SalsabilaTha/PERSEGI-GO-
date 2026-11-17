@@ -44,10 +44,10 @@ def load_config() -> dict:
         # Mode uji lokal: hanya aktif bila Supabase belum diatur dan bukan production.
         "DEV_LOGIN": app_env != "production" and not supabase_url,
         "DEV_JWT_SECRET": "persegi-go-dev-only-secret-0123456789abcdef",
-        # Tutor AI (DeepSeek). Kunci hanya dipakai di server, tidak pernah dikirim ke browser.
-        "DEEPSEEK_API_KEY": os.getenv("DEEPSEEK_API_KEY", "").strip(),
-        "DEEPSEEK_MODEL": os.getenv("DEEPSEEK_MODEL", "").strip() or "deepseek-chat",
-        "DEEPSEEK_BASE_URL": (os.getenv("DEEPSEEK_BASE_URL", "").strip() or "https://api.deepseek.com").rstrip("/"),
+        # Tutor AI (Gemini). Kunci hanya dipakai di server, tidak pernah dikirim ke browser.
+        "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY", "").strip(),
+        "GEMINI_MODEL": os.getenv("GEMINI_MODEL", "").strip() or "gemini-3.8-flash",
+        "GEMINI_BASE_URL": (os.getenv("GEMINI_BASE_URL", "").strip() or "https://generativelanguage.googleapis.com/v1beta/openai").rstrip("/"),
         "AI_RATE_LIMIT": 20,          # maksimal pertanyaan ke tutor per siswa ...
         "AI_RATE_WINDOW_MIN": 10,     # ... dalam 10 menit (mengendalikan biaya API)
         "MAX_CONTENT_LENGTH": 64 * 1024,

@@ -90,7 +90,7 @@ export function createTutorPanel(opts) {
   try {
     if (!localStorage.getItem(PRIVACY_KEY)) {
       privacy = h('p', { class: 'tutor-privacy small' },
-        'ℹ️ Percakapan diproses layanan AI DeepSeek dan disimpan untuk penelitian ',
+        'ℹ️ Percakapan diproses layanan AI Google Gemini dan disimpan untuk penelitian ',
         h('b', {}, 'tanpa nama dan email'), '. Jangan menulis data pribadi di sini. ',
         h('button', {
           class: 'link-button', type: 'button',

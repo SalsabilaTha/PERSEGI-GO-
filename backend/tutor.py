@@ -1,8 +1,8 @@
-"""Tutor AI (DeepSeek) yang membimbing siswa dengan model Rigorous Mathematical Thinking (RMT)
+"""Tutor AI (Gemini) yang membimbing siswa dengan model Rigorous Mathematical Thinking (RMT)
 dan prinsip Cognitive Load Theory (CLT).
 
 Prinsip penting:
-- Kunci API hanya di server. Identitas siswa (nama/email) TIDAK PERNAH dikirim ke DeepSeek.
+- Kunci API hanya di server. Identitas siswa (nama/email) TIDAK PERNAH dikirim ke Gemini.
 - Tutor tidak memberikan jawaban akhir; ada penjaga (leaks_answer) yang memeriksa balasan AI.
 - Bila AI tidak tersedia (tanpa kunci, offline, error), dipakai petunjuk bawaan (fallback_reply).
 """
@@ -157,14 +157,20 @@ def build_messages(mode: str, user_text: str, history: list[dict] | None = None,
     return messages
 
 
-def call_deepseek(messages: list[dict], api_key: str, model: str, base_url: str,
-                  timeout: float = 25) -> str:
-    """Memanggil DeepSeek Chat Completions (format kompatibel OpenAI) dengan pustaka bawaan Python."""
+def call_gemini(messages: list[dict], api_key: str, model: str, base_url: str,
+                timeout: float = 25) -> str:
+    """Memanggil Gemini lewat endpoint kompatibel OpenAI (Chat Completions) dengan pustaka bawaan.
+
+    Model Gemini 3 "berpikir" dulu sebelum menjawab dan proses itu ikut memakai kuota token.
+    Karena itu reasoning_effort dibuat rendah (cepat & hemat) dan max_tokens diberi ruang lebih;
+    panjang balasan tetap dibatasi oleh SYSTEM_PROMPT (≤ 3 kalimat) dan pemotongan di bawah.
+    """
     body = json.dumps({
         "model": model,
         "messages": messages,
-        "max_tokens": 300,
+        "max_tokens": 1024,
         "temperature": 0.4,
+        "reasoning_effort": "low",
         "stream": False,
     }).encode("utf-8")
     req = urllib.request.Request(

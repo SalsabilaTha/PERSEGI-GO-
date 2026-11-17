@@ -289,7 +289,7 @@ Manual: Lighthouse (PWA installable), uji 360 px, uji offline (mode pesawat), uj
 ## 12. Deploy (ringkas; detail di SETUP_AKUN.md)
 
 **Utama: Vercel (serverless).** `vercel.json` mengarahkan semua path ke `api/index.py` (Flask),
-region `sin1` (dekat Supabase Singapura), `maxDuration` 60 detik (panggilan DeepSeek ≤ 25 detik),
+region `sin1` (dekat Supabase Singapura), `maxDuration` 60 detik (panggilan Gemini ≤ 25 detik),
 `includeFiles` untuk `backend/`, `frontend/`, `content/`. Saat env `VERCEL` ada,
 `make_engine(serverless=True)` memakai `NullPool` + `prepare_threshold=None`; `DATABASE_URL`
 memakai Supabase Transaction pooler (6543). Batas tutor tersimpan di DB (aman lintas instance);
@@ -303,12 +303,12 @@ batas umum 60 request/menit di `auth.py` bersifat per-instance.
 3. Isi env var di Render. Tambahkan URL Render ke *Redirect URLs* Supabase.
 4. Buka URL HTTPS di HP → instal.
 
-## 13. Tutor AI (DeepSeek) dan RMT
+## 13. Tutor AI (Gemini) dan RMT
 
 ```
-Browser (tutorPanel.js) ──POST /api/tutor──► Flask (api.py) ──► tutor.py ──HTTPS──► DeepSeek
+Browser (tutorPanel.js) ──POST /api/tutor──► Flask (api.py) ──► tutor.py ──HTTPS──► Gemini
    {mode, problem_id, stage,                  validasi, batas        build_messages()     /chat/completions
-    error_code, hint_level,                   20/10 menit            (prompt RMT+CLT,     model deepseek-chat
+    error_code, hint_level,                   20/10 menit            (prompt RMT+CLT,     model gemini-3.8-flash
     student_input, message,                                           tanpa identitas)
     history≤8}                    ◄── {reply, phase, source} ── leaks_answer() → fallback_reply()
                                        simpan ke tutor_messages
@@ -316,11 +316,11 @@ Browser (tutorPanel.js) ──POST /api/tutor──► Flask (api.py) ──► 
 
 | Bagian | Isi |
 |---|---|
-| `backend/tutor.py` | `SYSTEM_PROMPT` (RMT + CLT), `build_messages`, `call_deepseek` (urllib, timeout 25 s, `max_tokens` 300), `leaks_answer`, `fallback_reply`, `phase_for` |
+| `backend/tutor.py` | `SYSTEM_PROMPT` (RMT + CLT), `build_messages`, `call_gemini` (urllib, timeout 25 s, `max_tokens` 1024, `reasoning_effort` low), `leaks_answer`, `fallback_reply`, `phase_for` |
 | `POST /api/tutor` | mode `hint` (latihan), `chat` (menu Tutor), `reflect` (tahap 6). Balasan `{reply, phase, source}` dengan `source` = `ai` atau `fallback` |
 | `GET /api/tutor/history?problem_id=` | riwayat percakapan siswa sendiri (30 terakhir) |
 | Tabel `tutor_messages` | `user_id, problem_id, mode, stage, phase, role, content, source, created_at`. RLS aktif. Ikut ekspor & hapus akun |
-| Konfigurasi | `DEEPSEEK_API_KEY` (rahasia), `DEEPSEEK_MODEL` (bawaan `deepseek-chat`), `DEEPSEEK_BASE_URL` (bawaan `https://api.deepseek.com`) |
+| Konfigurasi | `GEMINI_API_KEY` (rahasia), `GEMINI_MODEL` (bawaan `gemini-3.8-flash`), `GEMINI_BASE_URL` (bawaan `https://generativelanguage.googleapis.com/v1beta/openai`) |
 | Frontend | `components/tutorPanel.js`, `pages/tutor.js` (`#/tutor`), tombol bulat di Materi/Eksplorasi/Kuis |
 
 **Diagnosis fase RMT** (`phase_for`): tahap 0 → input; tahap 1–3 → elaborasi; tahap 4 → output;

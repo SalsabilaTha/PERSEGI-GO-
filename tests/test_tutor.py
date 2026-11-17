@@ -1,4 +1,4 @@
-"""Tes Tutor AI (RMT). DeepSeek selalu di-mock: tidak ada panggilan jaringan."""
+"""Tes Tutor AI (RMT). Gemini selalu di-mock: tidak ada panggilan jaringan."""
 import pytest
 
 from backend import content, create_app, tutor
@@ -10,22 +10,22 @@ def ai_client():
     app = create_app({
         "APP_ENV": "test", "DATABASE_URL": "sqlite://", "SUPABASE_URL": TEST_SUPABASE,
         "SUPABASE_JWT_SECRET": TEST_SECRET, "DEV_LOGIN": False,
-        "DEEPSEEK_API_KEY": "kunci-uji", "DEEPSEEK_MODEL": "deepseek-chat",
-        "DEEPSEEK_BASE_URL": "http://ai.invalid",
+        "GEMINI_API_KEY": "kunci-uji", "GEMINI_MODEL": "gemini-3.8-flash",
+        "GEMINI_BASE_URL": "http://ai.invalid",
     })
     return app.test_client()
 
 
 @pytest.fixture
 def fake_ai(monkeypatch):
-    """Mengganti DeepSeek dengan fungsi palsu; menyimpan pesan yang dikirim."""
+    """Mengganti Gemini dengan fungsi palsu; menyimpan pesan yang dikirim."""
     sent = {}
 
     def fake(messages, api_key, model, base_url, timeout=25):
         sent["messages"] = messages
         return sent.get("reply", "Coba lihat lagi: yang ditanya pinggiran atau permukaan?")
 
-    monkeypatch.setattr(tutor, "call_deepseek", fake)
+    monkeypatch.setattr(tutor, "call_gemini", fake)
     return sent
 
 
@@ -85,7 +85,7 @@ def test_tanpa_kunci_memakai_petunjuk_bawaan(client):
 def test_ai_gagal_memakai_petunjuk_bawaan(ai_client, monkeypatch):
     def boom(*a, **k):
         raise tutor.TutorError("timeout")
-    monkeypatch.setattr(tutor, "call_deepseek", boom)
+    monkeypatch.setattr(tutor, "call_gemini", boom)
     r = ask(ai_client, make_token(), mode="chat", message="Apa itu keliling?")
     assert r.status_code == 200 and r.json["source"] == "fallback"
 
@@ -133,8 +133,8 @@ def test_config_js_tidak_membocorkan_kunci(ai_client):
     assert "kunci-uji" not in body and '"aiEnabled": true' in body
 
 
-def test_call_deepseek_format_permintaan(monkeypatch):
-    """Memastikan format permintaan HTTP ke DeepSeek (kompatibel OpenAI) tanpa jaringan."""
+def test_call_gemini_format_permintaan(monkeypatch):
+    """Memastikan format permintaan HTTP ke Gemini (kompatibel OpenAI) tanpa jaringan."""
     captured = {}
 
     class FakeResp:
@@ -149,8 +149,9 @@ def test_call_deepseek_format_permintaan(monkeypatch):
         return FakeResp()
 
     monkeypatch.setattr(tutor.urllib.request, "urlopen", fake_urlopen)
-    out = tutor.call_deepseek([{"role": "user", "content": "hai"}], "sk-x", "deepseek-chat", "https://api.deepseek.com")
+    out = tutor.call_gemini([{"role": "user", "content": "hai"}], "AIza-x", "gemini-3.8-flash", "https://generativelanguage.googleapis.com/v1beta/openai")
     assert out == "Coba pikirkan lagi."
-    assert captured["url"] == "https://api.deepseek.com/chat/completions"
-    assert captured["auth"] == "Bearer sk-x"
-    assert b'"model": "deepseek-chat"' in captured["body"]
+    assert captured["url"] == "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+    assert captured["auth"] == "Bearer AIza-x"
+    assert b'"model": "gemini-3.8-flash"' in captured["body"]
+    assert b'"reasoning_effort": "low"' in captured["body"]

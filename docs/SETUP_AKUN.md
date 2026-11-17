@@ -59,24 +59,34 @@ SUPABASE_URL=https://abcd1234.supabase.co
 SUPABASE_ANON_KEY=eyJ...
 SUPABASE_JWT_SECRET=...
 DATABASE_URL=postgresql+psycopg://postgres.abcd1234:PASSWORD@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
-DEEPSEEK_API_KEY=sk-...
+GEMINI_API_KEY=AIza...
 FLASK_SECRET_KEY=isi-acak-panjang
 ```
 Lalu jalankan `python app.py`, buka http://localhost:5000, dan coba daftar + login.
 
-## 5b. DeepSeek (Tutor AI)
+## 5b. Google Gemini (Tutor AI)
 
-1. Buka https://platform.deepseek.com → daftar/masuk.
-2. **Top up** saldo (layanan berbayar per pemakaian; biaya per pertanyaan sangat kecil, tetapi
-   tetap pantau saldo).
-3. **API keys → Create new API key** → beri nama `persegi-go` → salin kunci `sk-...` 📋.
-   Kunci hanya ditampilkan sekali.
-4. Isi `DEEPSEEK_API_KEY=sk-...` di `.env` (lokal) dan di **Environment Variables** Vercel (produksi, §7c).
+1. Buka https://aistudio.google.com → masuk dengan akun Google.
+2. Klik **Get API key → Create API key** → pilih/buat proyek Google Cloud → salin kunci 📋
+   (biasanya diawali `AIza...`).
+3. **Batasi kunci** (wajib sejak Juni 2026; kunci tanpa batasan ditolak Gemini API):
+   di Google Cloud Console → **APIs & Services → Credentials** → klik kunci tersebut →
+   **API restrictions → Restrict key** → centang **Generative Language API** → **Save**.
+4. Isi `GEMINI_API_KEY=AIza...` di `.env` (lokal) dan di **Environment Variables** Vercel (produksi, §7c).
 5. Jalankan aplikasi, buka **Tutor AI**, lalu tanyakan sesuatu. Subjudul panel harus menampilkan
    "Pembimbing berpikir…", bukan "Mode petunjuk bawaan".
 
-> Kunci DeepSeek bersifat RAHASIA. Jangan menaruhnya di file frontend atau GitHub. Bila kunci
-> kosong atau saldo habis, aplikasi otomatis memakai petunjuk bawaan.
+Model bawaan: `gemini-3.8-flash` (bisa diganti lewat `GEMINI_MODEL`; daftar model di
+https://ai.google.dev/gemini-api/docs/models). Bila Google menghentikan sebuah model, cukup ganti
+nilai `GEMINI_MODEL` tanpa mengubah kode.
+
+> **Privasi:** pada paket **gratis**, Google boleh memakai isi percakapan untuk meningkatkan
+> layanannya. Identitas siswa memang tidak pernah dikirim, tetapi untuk penelitian dengan siswa
+> sungguhan pertimbangkan mengaktifkan **billing** (paket berbayar: data tidak dipakai melatih model),
+> dan tetap minta izin sekolah/orang tua.
+
+> Kunci Gemini bersifat RAHASIA. Jangan menaruhnya di file frontend atau GitHub. Bila kunci
+> kosong, kuota habis, atau ada error, aplikasi otomatis memakai petunjuk bawaan.
 
 ## 6. GitHub
 
@@ -118,8 +128,8 @@ Salin **nilainya dari `.env` Anda sendiri**; jangan dibagikan ke orang lain.
 | `SUPABASE_ANON_KEY` | dari `.env` |
 | `SUPABASE_JWT_SECRET` | dari `.env` |
 | `DATABASE_URL` | **URI Transaction pooler port 6543** (langkah 7a), bukan yang 5432 |
-| `DEEPSEEK_API_KEY` | dari `.env` (`sk-...`) |
-| `DEEPSEEK_MODEL` | `deepseek-chat` |
+| `GEMINI_API_KEY` | dari `.env` (`AIza...`) |
+| `GEMINI_MODEL` | `gemini-3.8-flash` |
 
 Tidak perlu mengisi `VERCEL`, karena Vercel mengisinya otomatis.
 
@@ -133,7 +143,7 @@ Tidak perlu mengisi `VERCEL`, karena Vercel mengisinya otomatis.
 
 Catatan Vercel:
 - Batas waktu fungsi `maxDuration: 60` detik. Bila paket Anda membatasi lebih kecil, cek di
-  **Settings → Functions**. Panggilan DeepSeek dibatasi 25 detik.
+  **Settings → Functions**. Panggilan Gemini dibatasi 25 detik.
 - Batas 20 pertanyaan tutor / 10 menit tersimpan di database, jadi tetap berlaku. Batas umum
   60 request/menit di `auth.py` tersimpan di memori tiap instance, jadi di Vercel sifatnya longgar.
 - Paket **Hobby** gratis untuk penggunaan non-komersial (cocok untuk tugas kuliah/penelitian).

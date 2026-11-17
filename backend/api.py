@@ -378,14 +378,14 @@ def ask_tutor():
 
     phase = tutor.phase_for(req["mode"], req["stage"], req["error_code"])
     reply, source = None, "fallback"
-    if cfg["DEEPSEEK_API_KEY"]:
+    if cfg["GEMINI_API_KEY"]:
         # Identitas siswa tidak ikut dikirim: hanya soal, tahap, dan isi percakapan.
         messages = tutor.build_messages(
             req["mode"], req["message"], req["history"], req["problem"], req["stage"],
             req["error_code"], req["hint_level"], req["student_input"])
         try:
-            reply = tutor.call_deepseek(messages, cfg["DEEPSEEK_API_KEY"], cfg["DEEPSEEK_MODEL"],
-                                        cfg["DEEPSEEK_BASE_URL"])
+            reply = tutor.call_gemini(messages, cfg["GEMINI_API_KEY"], cfg["GEMINI_MODEL"],
+                                      cfg["GEMINI_BASE_URL"])
             source = "ai"
         except tutor.TutorError:
             current_app.logger.warning("Tutor AI gagal dihubungi; memakai petunjuk bawaan.")

@@ -1,6 +1,6 @@
 /* Service worker PERSEGI GO!: membuat aplikasi bisa dipasang & dibuka offline.
    Naikkan VERSION setiap kali file aplikasi berubah. */
-const VERSION = 'persegi-go-v3';
+const VERSION = 'persegi-go-v4';
 const APP_CACHE = `${VERSION}-app`;
 const CDN_CACHE = `${VERSION}-cdn`;
 

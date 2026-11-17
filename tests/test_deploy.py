@@ -15,7 +15,7 @@ def test_vercel_json_valid():
     cfg = json.loads((ROOT / "vercel.json").read_text(encoding="utf-8"))
     assert cfg["regions"] == ["sin1"]                       # dekat Supabase Singapura
     fn = cfg["functions"]["api/index.py"]
-    assert fn["maxDuration"] >= 30                           # cukup untuk DeepSeek (timeout 25 s)
+    assert fn["maxDuration"] >= 30                           # cukup untuk Gemini (timeout 25 s)
     for folder in ("backend", "frontend", "content"):
         assert folder in fn["includeFiles"]
     assert cfg["rewrites"][0]["destination"] == "/api/index"
@@ -50,7 +50,7 @@ def test_entrypoint_vercel_production(monkeypatch, tmp_path):
     monkeypatch.setenv("SUPABASE_ANON_KEY", "anon-uji")
     monkeypatch.setenv("SUPABASE_JWT_SECRET", "rahasia-uji-yang-panjang-sekali-0000000000")
     monkeypatch.setenv("DATABASE_URL", f"sqlite:///{(tmp_path / 'v.db').as_posix()}")
-    monkeypatch.setenv("DEEPSEEK_API_KEY", "sk-uji")
+    monkeypatch.setenv("GEMINI_API_KEY", "sk-uji")
     import api.index as entry
     importlib.reload(entry)
     app = entry.app

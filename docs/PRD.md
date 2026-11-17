@@ -192,7 +192,7 @@ langkah demi langkah. Ada gambar persegi berlabel `s` dan tanda siku-siku.
 - (P1) **Ekspor data** akun (JSON) dan **Hapus akun** beserta datanya.
 
 ### F16. Tutor AI "Kak Tutor" berbasis RMT (P0) — *baru*
-- AI **DeepSeek** dipanggil dari server Python. Kunci API tidak pernah sampai ke browser.
+- AI **Gemini** dipanggil dari server Python. Kunci API tidak pernah sampai ke browser.
 - Muncul di dua tempat: tombol **🧭 Tanya Tutor** di setiap tahap soal cerita (konteks soal, tahap,
   kesalahan terakhir, dan tingkat bantuan dikirim otomatis) dan menu **Tutor AI** untuk tanya bebas
   seputar persegi.
@@ -287,7 +287,7 @@ pada posttest, dengan satuan benar.
 | Siswa lupa kata sandi | Fitur reset kata sandi lewat email |
 | Siswa di bawah umur | Data minimal, tanpa nama asli wajib, ada ekspor & hapus akun, izin dari guru/orang tua untuk uji coba |
 
-| Data percakapan anak dikirim ke layanan AI luar negeri (DeepSeek) | Tanpa nama/email; pemberitahuan di panel tutor; izin sekolah/orang tua; percakapan bisa diekspor & dihapus |
-| Biaya API DeepSeek | Batas 20 pertanyaan / 10 menit / siswa; `max_tokens` 300; pantau saldo di platform.deepseek.com |
+| Data percakapan anak dikirim ke layanan AI luar negeri (Google Gemini) | Tanpa nama/email; pemberitahuan di panel tutor; izin sekolah/orang tua; percakapan bisa diekspor & dihapus |
+| Biaya API Gemini | Batas 20 pertanyaan / 10 menit / siswa; `max_tokens` 1024, `reasoning_effort` low; pantau kuota/biaya di aistudio.google.com |
 | AI memberi jawaban akhir atau salah konsep | System prompt RMT + penjaga jawaban di server + uji manual sebelum dipakai siswa |
-| AI tidak tersedia (kunci kosong, saldo habis, offline) | Petunjuk bawaan otomatis; fitur lain tetap jalan |
+| AI tidak tersedia (kunci kosong, kuota habis, offline) | Petunjuk bawaan otomatis; fitur lain tetap jalan |
