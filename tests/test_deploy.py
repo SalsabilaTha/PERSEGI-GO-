@@ -1,4 +1,4 @@
-"""Tes kesiapan deploy (Vercel serverless & Render)."""
+"""Tes kesiapan deploy (Vercel serverless)."""
 import importlib
 import json
 from pathlib import Path

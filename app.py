@@ -1,6 +1,6 @@
 """Titik masuk pengembangan: jalankan `python app.py` lalu buka http://localhost:5000.
 
-Deploy: Vercel memakai api/index.py (lihat vercel.json); Render memakai gunicorn (render.yaml).
+Deploy: Vercel memakai api/index.py (lihat vercel.json).
 """
 from backend import create_app
 

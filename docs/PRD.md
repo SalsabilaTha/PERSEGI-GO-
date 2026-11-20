@@ -282,7 +282,7 @@ pada posttest, dengan satuan benar.
 | Risiko | Mitigasi |
 |---|---|
 | Data baru dari 1 siswa | Uji dengan siswa lain sebelum finalisasi |
-| Render gratis tertidur → request pertama ±30–60 detik | Tampilan dari cache PWA; aktivitas lewat outbox, tidak menunggu server |
+| Cold start fungsi Vercel (±1–3 detik) | Tampilan dari cache PWA; aktivitas lewat outbox, tidak menunggu server |
 | Proyek Supabase gratis dijeda setelah ±7 hari tanpa aktivitas | Data tetap aman; aktifkan lagi dari dashboard; jadwalkan uji coba berdekatan |
 | Siswa lupa kata sandi | Fitur reset kata sandi lewat email |
 | Siswa di bawah umur | Data minimal, tanpa nama asli wajib, ada ekspor & hapus akun, izin dari guru/orang tua untuk uji coba |

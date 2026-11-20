@@ -48,7 +48,6 @@ biarkan Google dan provider lain **tidak aktif**, supaya tidak ada jalur login l
 - Redirect URLs (tambahkan semua):
   - `http://localhost:5000/**`
   - `https://<nama-proyek>.vercel.app/**`
-  - (bila memakai Render) `https://<nama-app>.onrender.com/**`
 
 ## 5. File `.env` Lokal
 
@@ -94,10 +93,10 @@ nilai `GEMINI_MODEL` tanpa mengubah kode.
 2. Pastikan `.gitignore` berisi `.env`, `.venv/`, `__pycache__/`.
 3. Unggah kode (lewat VS Code: Source Control → Publish to GitHub).
 
-## 7. Vercel (Hosting utama)
+## 7. Vercel (Hosting)
 
 Vercel menjalankan Flask sebagai **fungsi serverless** (`api/index.py`, diatur `vercel.json`).
-Keuntungannya dibanding Render gratis: tidak ada jeda 30–60 detik saat server "bangun".
+Tidak ada server yang "tidur"; fungsi hanya butuh ±1–3 detik saat pertama dipanggil.
 
 ### 7a. Siapkan koneksi database untuk serverless
 Di Supabase → **Connect** → tab **Transaction pooler** (port **6543**, bukan Session pooler 5432)
@@ -147,25 +146,6 @@ Catatan Vercel:
 - Batas 20 pertanyaan tutor / 10 menit tersimpan di database, jadi tetap berlaku. Batas umum
   60 request/menit di `auth.py` tersimpan di memori tiap instance, jadi di Vercel sifatnya longgar.
 - Paket **Hobby** gratis untuk penggunaan non-komersial (cocok untuk tugas kuliah/penelitian).
-
-## 7-alt. Render (cadangan)
-
-Konfigurasi Render (`render.yaml`) tetap tersedia bila suatu saat ingin kembali ke Render.
-
-1. Buka https://render.com → daftar dengan GitHub.
-2. **New → Web Service** → pilih repo `persegi-go`.
-   - Region: **Singapore** (dekat dengan database Supabase)
-   - Runtime: **Python 3**
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `gunicorn "backend:create_app()"`
-   - Instance type: **Free**
-3. **Environment** → tambahkan semua variabel dari `.env` (kecuali yang khusus lokal), serta
-   `PYTHON_VERSION=3.12.7`. Di Render, `DATABASE_URL` boleh memakai Session pooler (port 5432).
-4. **Deploy**. Setelah selesai, Anda mendapat URL `https://<nama-app>.onrender.com`.
-5. Kembali ke **Supabase §4**, lalu pastikan URL ini sudah terdaftar.
-
-Catatan: layanan gratis Render **tertidur setelah 15 menit** tanpa pengunjung, sehingga akses
-pertama setelahnya lambat (±30–60 detik).
 
 ## 8. Uji Instal di HP
 

@@ -52,7 +52,6 @@ Aplikasi di-deploy ke **Vercel** sebagai fungsi serverless Python:
 
 Langkah lengkap (impor repo, Environment Variables termasuk `GEMINI_API_KEY`, Supabase
 Transaction pooler port 6543) ada di [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) §7.
-Konfigurasi Render (`render.yaml`) tetap tersedia sebagai cadangan.
 
 ## Memasang di HP
 

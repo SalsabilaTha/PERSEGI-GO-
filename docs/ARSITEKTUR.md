@@ -3,7 +3,7 @@
 ## 1. Gambaran Umum
 
 ```
- HP / Laptop (PWA)                     Render (HTTPS)                 Supabase
+ HP / Laptop (PWA)                     Vercel (HTTPS)                 Supabase
 ┌────────────────────┐   HTML/CSS/JS  ┌──────────────────┐  SQL     ┌────────────────┐
 │ frontend (JS)      │◄──────────────►│ Flask (Python)   │◄────────►│ PostgreSQL     │
 │ - service worker   │   /api + JWT   │ - static files   │          │ (RLS aktif)    │
@@ -22,13 +22,13 @@
 
 | Bagian | Pilihan |
 |---|---|
-| Backend | Python 3.11+, **Flask 3**, **SQLAlchemy 2 (Core)**, **psycopg 3** (driver Postgres), **PyJWT[crypto]**, python-dotenv, gunicorn |
+| Backend | Python 3.11+, **Flask 3**, **SQLAlchemy 2 (Core)**, **psycopg 3** (driver Postgres), **PyJWT[crypto]**, python-dotenv |
 | Database | Supabase PostgreSQL (koneksi *Session pooler*, port 5432) |
 | Auth | Supabase Auth: Email/Password saja, konfirmasi email aktif |
 | Frontend | HTML, CSS, JS ES Modules; `supabase-js` v2 (UMD, versi dikunci, dari jsDelivr) |
 | PWA | manifest + service worker + ikon PNG |
 | Tes | pytest (SQLite in-memory + JWT uji) |
-| Hosting | Render Web Service (gratis), deploy otomatis dari GitHub |
+| Hosting | Vercel (fungsi serverless Python, paket Hobby gratis), deploy otomatis dari GitHub |
 
 `requirements.txt` (rencana):
 ```
@@ -37,7 +37,6 @@ sqlalchemy
 psycopg[binary]
 pyjwt[crypto]
 python-dotenv
-gunicorn
 pillow        # hanya untuk scripts/make_icons.py
 pytest
 ```
@@ -51,7 +50,8 @@ supaya semua wheel tersedia.
 ├── app.py                    # python app.py → server pengembangan
 ├── requirements.txt
 ├── .env.example              # contoh variabel lingkungan (tanpa nilai rahasia)
-├── render.yaml               # konfigurasi deploy Render
+├── vercel.json               # konfigurasi deploy Vercel
+├── api/index.py              # titik masuk Flask untuk Vercel
 ├── backend/
 │   ├── __init__.py           # create_app(): daftar blueprint, route statis, /config.js, /sw.js
 │   ├── config.py             # baca env var
@@ -266,9 +266,9 @@ Karena `client_id` unik, pengiriman ulang tidak menggandakan data.
 
 ## 10. Keamanan dan Privasi
 
-- HTTPS (Render). Header keamanan: `Content-Security-Policy` (izinkan self, jsDelivr, fonts,
+- HTTPS (Vercel). Header keamanan: `Content-Security-Policy` (izinkan self, jsDelivr, fonts,
   `*.supabase.co`), `X-Content-Type-Options`, `Referrer-Policy`.
-- Rahasia hanya di env var Render; `.env` masuk `.gitignore`.
+- Rahasia hanya di Environment Variables Vercel; `.env` masuk `.gitignore`.
 - Setiap query difilter `user_id = g.user.id`.
 - Input divalidasi; ukuran body dibatasi (`MAX_CONTENT_LENGTH = 64 KB`).
 - Log server tidak mencatat token atau email.
@@ -288,19 +288,16 @@ Manual: Lighthouse (PWA installable), uji 360 px, uji offline (mode pesawat), uj
 
 ## 12. Deploy (ringkas; detail di SETUP_AKUN.md)
 
-**Utama: Vercel (serverless).** `vercel.json` mengarahkan semua path ke `api/index.py` (Flask),
+**Vercel (serverless).** `vercel.json` mengarahkan semua path ke `api/index.py` (Flask),
 region `sin1` (dekat Supabase Singapura), `maxDuration` 60 detik (panggilan Gemini ≤ 25 detik),
 `includeFiles` untuk `backend/`, `frontend/`, `content/`. Saat env `VERCEL` ada,
 `make_engine(serverless=True)` memakai `NullPool` + `prepare_threshold=None`; `DATABASE_URL`
 memakai Supabase Transaction pooler (6543). Batas tutor tersimpan di DB (aman lintas instance);
 batas umum 60 request/menit di `auth.py` bersifat per-instance.
 
-**Cadangan: Render** (langkah di bawah, `render.yaml`).
-
 1. Jalankan `schema.sql` di SQL Editor Supabase.
-2. Push ke GitHub → Render "New Web Service" → build `pip install -r requirements.txt`,
-   start `gunicorn "backend:create_app()"`.
-3. Isi env var di Render. Tambahkan URL Render ke *Redirect URLs* Supabase.
+2. Push ke GitHub → impor repo di Vercel (Framework Preset: Other).
+3. Isi Environment Variables di Vercel. Tambahkan URL `*.vercel.app` ke *Redirect URLs* Supabase.
 4. Buka URL HTTPS di HP → instal.
 
 ## 13. Tutor AI (Gemini) dan RMT

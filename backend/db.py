@@ -105,7 +105,7 @@ def make_engine(url: str, serverless: bool = False) -> Engine:
         # diserahkan ke Supabase Transaction pooler (port 6543). prepare_threshold=None
         # mematikan prepared statement yang tidak didukung pgbouncer mode transaksi.
         return create_engine(url, poolclass=NullPool, connect_args={"prepare_threshold": None})
-    # Server biasa (Render/lokal). pool_pre_ping: koneksi lama ke Supabase bisa terputus saat server tidur.
+    # Server lokal yang terhubung ke Supabase. pool_pre_ping: koneksi lama bisa terputus.
     return create_engine(url, pool_pre_ping=True, pool_size=3, max_overflow=2)
 
 

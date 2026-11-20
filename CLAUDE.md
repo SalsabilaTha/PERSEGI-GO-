@@ -29,7 +29,7 @@ Ciri utama:
 | [docs/DESAIN.md](docs/DESAIN.md) | Design system PERSEGI GO!, layout, wireframe tiap layar, aturan CLT |
 | [docs/ARSITEKTUR.md](docs/ARSITEKTUR.md) | Stack, struktur folder, API, database, auth, PWA, offline |
 | [docs/KONTEN_MATERI.md](docs/KONTEN_MATERI.md) | Materi, kuis, bank soal, miskonsepsi, XP & lencana |
-| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, GitHub, Vercel (Render cadangan) |
+| [docs/SETUP_AKUN.md](docs/SETUP_AKUN.md) | Langkah membuat akun Supabase, GitHub, Vercel |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Tahapan pengerjaan dan checklist |
 
 Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila ragu.
@@ -38,12 +38,12 @@ Kalau ada pertentangan: **PRD > DESAIN > ARSITEKTUR**. Tanyakan ke pengguna bila
 
 | Lapisan | Teknologi |
 |---|---|
-| Backend | **Python 3.11+ + Flask**, SQLAlchemy (Core), PyJWT, gunicorn (produksi) |
+| Backend | **Python 3.11+ + Flask**, SQLAlchemy (Core), PyJWT |
 | Database | **Supabase PostgreSQL** (produksi & pengembangan); **SQLite in-memory** untuk tes |
 | Auth | **Supabase Auth** (Email/Password saja) via `supabase-js` v2 |
 | Frontend | **HTML + CSS + JavaScript ES Modules**, tanpa framework, tanpa npm, tanpa build tool |
 | PWA | `manifest.webmanifest` + `sw.js` + ikon PNG |
-| Hosting | **Vercel** (fungsi serverless Python, `api/index.py` + `vercel.json`, region `sin1`); **Render** (`render.yaml`) sebagai cadangan |
+| Hosting | **Vercel** (fungsi serverless Python, `api/index.py` + `vercel.json`, region `sin1`) |
 | Tutor AI | **Gemini** `gemini-3.8-flash` (API kompatibel OpenAI), dipanggil **hanya dari Flask** (`backend/tutor.py`, `urllib` bawaan) |
 
 Aturan:
