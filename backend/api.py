@@ -387,8 +387,10 @@ def ask_tutor():
             reply = tutor.call_gemini(messages, cfg["GEMINI_API_KEY"], cfg["GEMINI_MODEL"],
                                       cfg["GEMINI_BASE_URL"])
             source = "ai"
-        except tutor.TutorError:
-            current_app.logger.warning("Tutor AI gagal dihubungi; memakai petunjuk bawaan.")
+        except tutor.TutorError as exc:
+            # Sertakan error asli agar bisa didiagnosis di log Vercel (tanpa kunci/identitas siswa).
+            current_app.logger.warning("Tutor AI gagal dihubungi; memakai petunjuk bawaan. "
+                                       "model=%s error=%s", cfg["GEMINI_MODEL"], exc)
     guarded = (req["problem"] is not None and req["mode"] != "reflect"
                and (req["stage"] is None or req["stage"] < 4))
     if reply and guarded and tutor.leaks_answer(reply, req["problem"]):

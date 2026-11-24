@@ -8,12 +8,16 @@ Prinsip penting:
 """
 from __future__ import annotations
 
+import http.client
 import json
+import logging
 import re
 import urllib.error
 import urllib.request
 
 from . import geometry
+
+logger = logging.getLogger(__name__)
 
 MODES = {"hint", "chat", "reflect"}
 
@@ -177,14 +181,39 @@ def call_gemini(messages: list[dict], api_key: str, model: str, base_url: str,
         f"{base_url}/chat/completions", data=body, method="POST",
         headers={"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"},
     )
+    # Info diagnosis: hanya ada/tidaknya kunci dan panjangnya. Nilai kunci TIDAK PERNAH dicetak.
+    key_info = f"model={model!r} base_url={base_url!r} key_terbaca={bool(api_key)} panjang_key={len(api_key or '')}"
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        reply = data["choices"][0]["message"]["content"]
-    except (urllib.error.URLError, TimeoutError, KeyError, IndexError, ValueError) as exc:
-        raise TutorError(str(exc)) from exc
-    reply = (reply or "").strip()
+            raw = resp.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as exc:
+        # Isi respons Gemini memuat alasan asli (429 kuota, 404 model, 400 kunci, 403 akses).
+        try:
+            err_body = exc.read().decode("utf-8", errors="replace")
+        except Exception:  # noqa: BLE001 - badan error bisa saja tidak terbaca
+            err_body = "<badan respons tidak terbaca>"
+        logger.warning("Gemini HTTP %s %s | %s | respons: %s",
+                       exc.code, exc.reason, key_info, err_body[:500])
+        raise TutorError(f"HTTP {exc.code}: {err_body[:200]}") from exc
+    except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+        # OSError mencakup TimeoutError dan ConnectionResetError yang dulu tidak tertangkap.
+        logger.warning("Gemini koneksi gagal: %s: %s | %s", type(exc).__name__, exc, key_info)
+        raise TutorError(f"{type(exc).__name__}: {exc}") from exc
+    try:
+        data = json.loads(raw)
+        choice = data["choices"][0]
+        reply = choice["message"].get("content")
+    except (KeyError, IndexError, TypeError, AttributeError, ValueError) as exc:
+        logger.warning("Gemini format respons tak terduga: %s: %s | %s | respons: %s",
+                       type(exc).__name__, exc, key_info, raw[:500])
+        raise TutorError(f"Format respons: {type(exc).__name__}: {exc}") from exc
+    reply = (reply or "").strip() if isinstance(reply, str) else ""
     if not reply:
+        # Balasan kosong biasanya karena safety filter (finish_reason=content_filter)
+        # atau token habis untuk "berpikir" (finish_reason=length). Tetap memakai fallback.
+        logger.warning("Gemini balasan kosong: finish_reason=%r | %s | respons: %s",
+                       choice.get("finish_reason") if isinstance(choice, dict) else None,
+                       key_info, raw[:500])
         raise TutorError("Balasan kosong.")
     return reply[:900]
 
